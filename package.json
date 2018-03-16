@@ -1,0 +1,23 @@
+{
+    "name": "fun-messenger",
+    "version": "0.0.0",
+    "description": "My attempt at making an app with the Parcel Bundler, React, and Typescript",
+    "main": "src/index.html",
+    "dependencies": {
+        "material-ui": "^0.20.0",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0"
+    },
+    "devDependencies": {
+        "node-sass": "^4.7.2",
+        "parcel-bundler": "^1.6.2",
+        "typescript": "^2.7.2"
+    },
+    "scripts": {
+        "serve": "parcel src/",
+        "build": "parcel build src/",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Eli Gundry",
+    "license": "ISC"
+}
