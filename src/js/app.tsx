@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import * as MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import { Messenger } from './components/Messenger';
 import { ThreadProps } from './components/Thread';
@@ -8,9 +7,11 @@ import { ThreadProps } from './components/Thread';
 const testThread: ThreadProps = {
     messages: [
         {
+            id: 1,
             text: "Hello world!"
         },
         {
+            id: 2,
             text: "Hello back!"
         }
     ]

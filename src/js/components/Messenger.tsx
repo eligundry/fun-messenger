@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { Composer } from './Composer';
 import { Thread, ThreadProps } from './Thread';
 
 export interface MessengerProps {
@@ -9,9 +10,10 @@ export interface MessengerProps {
 export class Messenger extends React.Component<MessengerProps, {}> {
     render() {
         return (
-            <div>
+            <main className="messenger">
                 <Thread messages={this.props.thread.messages} />
-            </div>
+                <Composer />
+            </main>
         );
     }
 }

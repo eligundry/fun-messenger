@@ -10,8 +10,8 @@ export class Thread extends React.Component<ThreadProps, {}> {
     private renderMessage(message: MessageProps, idx: number) {
         return (
             <Message
-                text={message.text}
-                key={idx.toString()}
+                key={message.id.toString()}
+                {...message}
             />
         );
     }
@@ -20,7 +20,7 @@ export class Thread extends React.Component<ThreadProps, {}> {
         const messages = this.props.messages.map(this.renderMessage);
 
         return (
-            <div>
+            <div className="thread">
                 {messages}
             </div>
         );

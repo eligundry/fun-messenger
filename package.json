@@ -4,7 +4,7 @@
     "description": "My attempt at making an app with the Parcel Bundler, React, and Typescript",
     "main": "src/index.html",
     "dependencies": {
-        "material-ui": "^0.20.0",
+        "muicss": "^0.9.37",
         "react": "^16.2.0",
         "react-dom": "^16.2.0"
     },
