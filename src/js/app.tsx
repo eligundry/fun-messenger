@@ -1,8 +1,11 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
 
 import { Messenger } from './components/Messenger';
 import { ThreadProps } from './components/Thread';
+import rootReducer from './reducers';
 
 const testThread: ThreadProps = {
     messages: [
@@ -17,8 +20,12 @@ const testThread: ThreadProps = {
     ]
 };
 
+const store = createStore(rootReducer);
+
 const App = () => (
-    <Messenger thread={testThread} />
+    <Provider store={store}>
+        <Messenger thread={testThread} />
+    </Provider>
 );
 
 ReactDOM.render(

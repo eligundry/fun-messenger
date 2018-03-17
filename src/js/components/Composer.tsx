@@ -32,8 +32,7 @@ export class Composer extends React.Component<ComposerProps, ComposerState> {
 
         return (
             <form className="composer" onSubmit={handleSubmit}>
-                <textarea placeholder={placeholder} value={value} onChange={updateMessage}>
-                </textarea>
+                <textarea placeholder={placeholder} value={value} onChange={updateMessage}></textarea>
                 <button onClick={handleSubmit}>Send</button>
             </form>
         )
