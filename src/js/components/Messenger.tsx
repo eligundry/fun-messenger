@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Composer } from './Composer';
 import { Thread, ThreadProps } from './Thread';
 
-export interface MessengerProps {
+export interface MessengerProps extends React.Props<Messenger> {
     thread?: ThreadProps,
 }
 

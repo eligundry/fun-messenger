@@ -1,40 +1,21 @@
 import * as React from 'react';
 
-interface ComposerProps {
+interface ComposerProps extends React.Props<Composer> {
     placeholder?: string,
+    value?: string,
+    onSubmit()?: void,
 }
 
-interface ComposerState {
-    value: string = '',
-}
+export const Composer: React.SFC<ComposerProps> = (props: ComposerProps) => {
+    const { onSubmit, placeholder, text } = props;
+    const handleSubmit = () => { onSubmit(); };
 
-export class Composer extends React.Component<ComposerProps, ComposerState> {
-    readonly defaultPlaceholder = 'Compse your message...';
+    return (
+        <form className="composer" onSubmit={handleSubmit}>
+            <textarea placeholder={placeholder} value={text}></textarea>
+            <button onClick={handleSubmit}>Send</button>
+        </form>
+    );
+};
 
-    updateMessage(event) {
-        this.setState({
-            value: event.target.value,
-        });
-
-        event.preventDefault();
-    }
-
-    handleSubmit(event) {
-        // @TODO Send the message
-        event.preventDefault();
-    }
-
-    render() {
-        const handleSubmit = this.handleSubmit.bind(this);
-        const updateMessage = this.updateMessage.bind(this);
-        const value = this.state ? this.state.value : '';
-        const placeholder = this.props ? this.props.placeholder : this.defaultPlaceholder;
-
-        return (
-            <form className="composer" onSubmit={handleSubmit}>
-                <textarea placeholder={placeholder} value={value} onChange={updateMessage}></textarea>
-                <button onClick={handleSubmit}>Send</button>
-            </form>
-        )
-    }
-}
+export default Composer;

@@ -1,16 +1,16 @@
 import * as React from 'react';
 
-export interface MessageProps {
+export interface MessageProps extends React.Props<Message> {
     id: number,
     text: string,
 }
 
-export class Message extends React.Component<MessageProps, {}> {
-    render() {
-        return (
-            <div className="message">
-                {this.props.text}
-            </div>
-        );
-    }
-}
+export const Message: React.SFC<MessageProps> = (props) => {
+    return (
+        <div className="message">
+            {props.text}
+        </div>
+    );
+};
+
+export default Message

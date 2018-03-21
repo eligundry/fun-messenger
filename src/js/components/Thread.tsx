@@ -2,27 +2,23 @@ import * as React from 'react';
 
 import { Message, MessageProps } from './Message';
 
-export interface ThreadProps {
+export interface ThreadProps extends React.Props<Thread> {
     messages?: MessageProps[],
 }
 
-export class Thread extends React.Component<ThreadProps, {}> {
-    private renderMessage(message: MessageProps, idx: number) {
+export const Thread: React.SFC<ThreadProps> = (props) => {
+    const messages = props.messages.map((message: MessageProps) =>{
         return (
             <Message
                 key={message.id.toString()}
                 {...message}
             />
         );
-    }
+    });
 
-    render() {
-        const messages = this.props.messages.map(this.renderMessage);
-
-        return (
-            <div className="thread">
-                {messages}
-            </div>
-        );
-    }
+    return (
+        <div className="thread">
+            {messages}
+        </div>
+    );
 }
