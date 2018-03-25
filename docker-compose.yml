@@ -1,0 +1,48 @@
+version: '3'
+services:
+  frontend:
+    image: eligundry/fun-messenger-frontend
+    container_name: fm-frontend
+    build: .
+    volumes:
+      - .:/opt/fun-messenger-frontend
+      - ./dist:/usr/share/nginx/html
+      - ./docker/nginx/fontend.conf:/etc/nginx/sites-enabled/default
+
+  backend:
+    image: eligundry/fun-messenger-backend
+    container_name: fm-backend
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    volumes:
+      - .:/opt/fun_messenger
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: fm-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/proxy.conf:/etc/nginx/sites-enabled/default
+
+  db:
+    image: postgres
+    container_name: fm-db
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=fm
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./docker/postgres:/docker-entrypoint-initdb.d
+
+  adminer:
+    image: adminer
+    container_name: fm-adminer
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata: {}

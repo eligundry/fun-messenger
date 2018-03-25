@@ -1,0 +1,3 @@
+#!/bin/bash
+
+FLASK_APP=fun_messenger/cli.py flask "$@"

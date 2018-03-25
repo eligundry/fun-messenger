@@ -21,6 +21,7 @@
     "scripts": {
         "serve": "parcel src/",
         "build": "parcel build src/",
+        "docker-build": "parcel build src/ -d /usr/share/nginx/html",
         "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "tslint -c tslint.json src/**/*.tsx"
     },
