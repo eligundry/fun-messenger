@@ -1,9 +1,10 @@
 """User model."""
 
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_utils.types import ArrowType
 
-from fun_messenger.extensions import bcrypt, db
+from fun_messenger.extensions import bcrypt, db, jwt
 
 from .base import BaseModel
 
@@ -27,15 +28,14 @@ class User(BaseModel, db.Model):
     def get_friends(cls, user_id):
         return (
             cls.query()
-            .join(Friends, (db.and_(
+            .join(Friend, (db.and_(
                 db.or_(
                     Friend.initiator_id == user_id,
                     Friend.recipient_id == user_id
                 ),
                 Friend.accepted == True,
-                Friend.archived_at == None,
             )))
-            .filter(User.archived_at == None)
+            .filter(User.is_archived == False)
         )
 
 
@@ -55,7 +55,24 @@ class Friend(BaseModel, db.Model):
         nullable=True,
     )
 
+    @hybrid_property
+    def accepted(self):
+        return self.is_archived is False and self.accepted_at is not None
 
+    @accepted.expression
+    def accepted(cls):
+        return db.and_(
+            cls.archived_at != None,
+            cls.accepted_at != None,
+        )
+
+
+@db.event.listens_for(User, 'before_insert')
+def hash_password_before_insert(mapper, connection, target):
+    target.hash_password()
+
+
+@jwt.authentication_handler
 def authenticate(email, password):
     return (
         User.query()
@@ -68,5 +85,6 @@ def authenticate(email, password):
     )
 
 
+@jwt.identity_handler
 def identity(payload):
     return User.select().where(User.id == payload['identity']).get()

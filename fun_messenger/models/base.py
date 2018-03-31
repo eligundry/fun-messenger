@@ -4,8 +4,10 @@ import arrow
 import stringcase
 import sqlalchemy
 
+from fleaker import MISSING
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_utils.types import ArrowType
 from werkzeug.utils import cached_property
 
@@ -28,6 +30,21 @@ class BaseModel(_Base):
     @cached_property
     def __tablename__(self):
         return stringcase.snakecase(inflect.plural(self.__class__.__name__))
+
+    @hybrid_property
+    def is_archived(self):
+        return self.archived_at == None
+
+    @classmethod
+    def get_all(cls, archived=MISSING):
+        query = cls.query()
+
+        if archived is not MISSING:
+            query = query.filter(cls.is_archived == archived)
+        else:
+            query = query.filter(cls.is_archived == False)
+
+        return query
 
 
 @db.event.listens_for(BaseModel, 'before_update')

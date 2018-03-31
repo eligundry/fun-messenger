@@ -4,7 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-peewee_migrate = "*"
 Flask-SocketIO = "*"
 Flask-JWT = "*"
 Flask-Bcrypt = "*"
@@ -17,10 +16,14 @@ SQLAlchemy-Utils = "*"
 Flask-Migrate = "*"
 marshmallow-sqlalchemy = "*"
 "psycopg2-binary" = "*"
+flask-classful = "*"
 
 [dev-packages]
 flask-shell-ipython = "*"
 pylint = "*"
+pytest = "*"
+pytest-flask = "*"
+faker = "*"
 
 [requires]
 python_version = "3.6"

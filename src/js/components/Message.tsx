@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface MessageProps extends React.Props<Message> {
-    id: number,
+    id: string,
     text: string,
 }
 

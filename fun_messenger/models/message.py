@@ -5,12 +5,11 @@ from sqlalchemy.dialects.postgresql import UUID
 from fun_messenger.extensions import db
 
 from .base import BaseModel
-from .user import User
 
 
 class Thread(BaseModel, db.Model):
     title = db.Column(db.Unicode(255), nullable=True)
-    created_by_id = db.Column(UUID, db.ForeignKey(User.id), nullable=False)
+    created_by_id = db.Column(UUID, db.ForeignKey('users.id'), nullable=False)
 
     created_by = db.relationship(
         'User',
@@ -23,16 +22,16 @@ class Thread(BaseModel, db.Model):
     def get_threads(cls, user_id):
         return (
             cls.query()
-            .join(ThreadUsers, and_(
-                ThreadUsers.user_id == user_id,
-                ThreadUsers.thread_id == cls.id,
-                ThreadUsers.is_archived == False,
+            .join(ThreadUser, db.and_(
+                ThreadUser.user_id == user_id,
+                ThreadUser.thread_id == cls.id,
+                ThreadUser.is_archived == False,
             ))
             .filter(cls.is_archived == False)
         )
 
 
-class ThreadUsers(BaseModel, db.Model):
+class ThreadUser(BaseModel, db.Model):
     user_id = db.Column(UUID, db.ForeignKey('users.id'), nullable=False)
     thread_id = db.Column(UUID, db.ForeignKey('threads.id'), nullable=False)
 
@@ -52,7 +51,7 @@ class ThreadUsers(BaseModel, db.Model):
 
 class Message(BaseModel, db.Model):
     author_id = db.Column(UUID, db.ForeignKey('users.id'), nullable=False)
-    thread_id = db.Column(UUID, db.ForeignKey('threads.id'), nullable=False)
+    # thread_id = db.Column(UUID, db.ForeignKey('threads.id'), nullable=False)
     text = db.Column(db.Text, nullable=False)
 
     user = db.relationship(
@@ -69,7 +68,7 @@ class Message(BaseModel, db.Model):
     )
 
     @classmethod
-    def get_thread_messages(thread_id):
+    def get_thread_messages(cls, thread_id):
         return (
             cls.query()
             .filter(db.and_(
