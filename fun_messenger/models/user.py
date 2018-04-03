@@ -1,8 +1,11 @@
 """User model."""
 
-from flask import jsonify
+from datetime import datetime
+
+from flask import current_app, jsonify
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.orm import validates
 from sqlalchemy_utils.types import ArrowType
 
 from fun_messenger.extensions import bcrypt, db, jwt
@@ -16,6 +19,9 @@ class User(db.Model, BaseModel):
     email = db.Column(db.Unicode(255), nullable=False, unique=True)
     password = db.Column(db.Unicode(255), nullable=False)
 
+    def password_is_hashed(self):
+        return self.password.startswith('$2b$12$')
+
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
 
@@ -25,16 +31,22 @@ class User(db.Model, BaseModel):
 
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
+    @validates('email')
+    def validate_email(self, key, email):
+        assert '@' in email
+        return email
+
     @classmethod
     def get_friends(cls, user_id):
         return (
-            cls.query()
+            cls.query
             .join(Friend, (db.and_(
                 db.or_(
                     Friend.initiator_id == user_id,
-                    Friend.recipient_id == user_id
+                    Friend.recipient_id == user_id,
                 ),
                 Friend.accepted == True,
+                Friend.is_archived == False,
             )))
             .filter(User.is_archived == False)
         )
@@ -43,6 +55,12 @@ class User(db.Model, BaseModel):
 @db.event.listens_for(User, 'before_insert')
 def hash_password_before_insert(mapper, connection, target):
     target.hash_password()
+
+
+@db.event.listens_for(User, 'before_update')
+def hash_password_before_update(mapper, connection, target):
+    if not target.password_is_hashed():
+        target.hash_password()
 
 
 class PGPKey(db.Model, BaseModel):
@@ -62,6 +80,13 @@ class PGPKey(db.Model, BaseModel):
     )
     public_key = db.Column(db.Text, nullable=False)
     private_key = db.Column(db.Text, nullable=False)
+
+    user = db.relationship(
+        'User',
+        backref=db.backref('pgp_keys', uselist=True),
+        lazy=True,
+        uselist=False,
+    )
 
 
 class Friend(db.Model, BaseModel):
@@ -121,13 +146,26 @@ def authenticate(email, password):
     )
 
 
+@jwt.jwt_payload_handler
+def make_payload(identity: User) -> dict:
+    iat = datetime.utcnow()
+    return {
+        'exp': iat + current_app.config.get('JWT_EXPIRATION_DELTA'),
+        'iat': iat,
+        'identity': str(identity.id),
+        'nbf': iat + current_app.config.get('JWT_NOT_BEFORE_DELTA'),
+    }
+
+
 @jwt.identity_handler
-def identity(payload):
-    return User.select().where(User.id == payload['identity']).get()
+def identity(payload: dict) -> User:
+    return User.query.filter(User.id == payload['identity']).one()
+
 
 
 @jwt.jwt_error_handler
 def jwt_error_handler(exc):
     return jsonify({
-        'message': exc.args[0],
-    }), 400
+        'message': exc.error,
+        'description': exc.description,
+    }), 401

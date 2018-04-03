@@ -3,6 +3,7 @@
 from flask import Blueprint, jsonify
 from marshmallow import ValidationError
 from sqlalchemy.orm.exc import NoResultFound
+from werkzeug.exceptions import BadRequest
 
 from .messages import MessagesView
 from .threads import ThreadsView
@@ -28,6 +29,12 @@ def register_api_routes(app):
     def validation_error(exc):
         return jsonify({
             'message': exc.args[0],
+        }), 400
+
+    @blueprint.errorhandler(BadRequest)
+    def bad_request(exc):
+        return jsonify({
+            'message': exc.args[0]
         }), 400
 
     blueprint.register(app, {})

@@ -48,8 +48,7 @@ class UserProvider(BaseProvider):
     def friends(self, user: models.User, count: int):
         fs = []
 
-        with db.session.begin_nested():
-            for _ in range(int):
-                fs.append(self.friend(user))
+        for _ in range(count):
+            fs.append(self.friend(user))
 
         return fs

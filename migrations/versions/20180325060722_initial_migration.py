@@ -1,4 +1,4 @@
-"""Inital Migration
+"""Initial Migration
 
 Revision ID: eeaf72ce2537
 Revises:
@@ -36,9 +36,14 @@ def upgrade():
         """
         CREATE TABLE pgp_keys (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            user_ID UUID NOT NULL REFERENCES users,
+            user_ID UUID NOT NULL REFERENCES users
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
             public_key TEXT NOT NULL,
-            private_key TEXT NOT NULL
+            private_key TEXT NOT NULL,
+            created_at TIMESTAMP NOT NULL,
+            updated_at TIMESTAMP NULL,
+            archived_at TIMESTAMP NULL
         )
         """
     )
@@ -46,10 +51,14 @@ def upgrade():
         """
         CREATE TABLE friends (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            initiator_id UUID NOT NULL REFERENCES users,
-            recipient_id UUID NOT NULL REFERENCES users,
+            initiator_id UUID NOT NULL REFERENCES users
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+            recipient_id UUID NOT NULL REFERENCES users
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
             accepted_at TIMESTAMP NULL,
-            text TEXT NULL,
+            message TEXT NULL,
             created_at TIMESTAMP NOT NULL,
             updated_at TIMESTAMP NULL,
             archived_at TIMESTAMP NULL
@@ -61,7 +70,9 @@ def upgrade():
         CREATE TABLE threads (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             title VARCHAR(255) NULL,
-            created_by_id UUID NOT NULL REFERENCES users,
+            created_by_id UUID NULL REFERENCES users
+                ON DELETE SET NULL
+                ON UPDATE CASCADE,
             created_at TIMESTAMP NOT NULL,
             updated_at TIMESTAMP NULL,
             archived_at TIMESTAMP NULL
@@ -72,8 +83,12 @@ def upgrade():
         """
         CREATE TABLE thread_users (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            user_id UUID NOT NULL REFERENCES users,
-            thread_id UUID NOT NULL REFERENCES threads,
+            user_id UUID NOT NULL REFERENCES users
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+            thread_id UUID NOT NULL REFERENCES threads
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
             created_at TIMESTAMP NOT NULL,
             updated_at TIMESTAMP NULL,
             archived_at TIMESTAMP NULL
@@ -84,8 +99,12 @@ def upgrade():
         """
         CREATE TABLE messages (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            author_id UUID NOT NULL REFERENCES users,
-            thread_id UUID NOT NULL REFERENCES threads,
+            author_id UUID NOT NULL REFERENCES users
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+            thread_id UUID NOT NULL REFERENCES threads
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
             text TEXT NOT NULL,
             created_at TIMESTAMP NOT NULL,
             updated_at TIMESTAMP NULL,

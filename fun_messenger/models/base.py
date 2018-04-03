@@ -10,6 +10,7 @@ from sqlalchemy.ext.declarative import declared_attr, declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_utils.types import ArrowType
 
+from fun_messenger.exceptions import InvalidUpdateKey
 from fun_messenger.extensions import db, inflect
 
 
@@ -18,7 +19,7 @@ class Base(object):
     @declared_attr
     def id(cls):
         return db.Column(
-            UUID(as_uuid=True),
+            UUID(as_uuid=False),
             primary_key=True,
             server_default=sqlalchemy.text("gen_random_uuid()"),
         )
@@ -47,7 +48,7 @@ class Base(object):
 
     @hybrid_property
     def is_archived(self):
-        return self.archived_at == None
+        return self.archived_at != None
 
     def archive(self):
         self.archived_at = arrow.utcnow()
@@ -57,7 +58,7 @@ class Base(object):
 
     @classmethod
     def get_all(cls, archived=MISSING):
-        query = cls.query()
+        query = cls.query
 
         if archived is not MISSING:
             query = query.filter(cls.is_archived == archived)
@@ -65,6 +66,14 @@ class Base(object):
             query = query.filter(cls.is_archived == False)
 
         return query
+
+    def update(self, data: dict):
+        for key, value in data.items():
+            if not hasattr(self, key):
+                classname = self.__class__.__name__
+                raise InvalidUpdateKey(f"{classname} has not attribute named {key}.")
+
+            setattr(self, key, value)
 
 
 BaseModel = declarative_base(cls=Base)
