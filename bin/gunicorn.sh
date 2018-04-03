@@ -1,3 +1,6 @@
 #!/bin/bash
 
-/usr/local/bin/gunicorn fun_messenger.entrypoints.web:app
+/usr/local/bin/gunicorn \
+    --worker-class eventlet \
+    -w 1 \
+    fun_messenger.entrypoints.web:app

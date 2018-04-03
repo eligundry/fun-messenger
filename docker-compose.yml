@@ -1,20 +1,22 @@
 version: '3'
 services:
   frontend:
-    image: eligundry/fun-messenger-frontend
+    image: eligundry/fun-messenger-frontend:dev
     container_name: fm-frontend
-    build: .
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend-dev
     volumes:
       - .:/opt/fun-messenger-frontend
       - ./dist:/usr/share/nginx/html
       - ./docker/nginx/fontend.conf:/etc/nginx/sites-enabled/default
 
   backend:
-    image: eligundry/fun-messenger-backend
+    image: eligundry/fun-messenger-backend:dev
     container_name: fm-backend
     build:
       context: .
-      dockerfile: Dockerfile.backend
+      dockerfile: docker/Dockerfile.backend-dev
     volumes:
       - .:/opt/fun_messenger
 
@@ -43,6 +45,10 @@ services:
     container_name: fm-adminer
     ports:
       - "8080:8080"
+
+  redis:
+    image: redis:4-alpine
+    container_name: fm-redis
 
 volumes:
   pgdata: {}

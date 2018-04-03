@@ -5,6 +5,7 @@ from marshmallow import fields as f
 
 
 class UserSchema(Schema):
+    id = f.UUID()
     first_name = f.String(**STR_REQUIRED)
     last_name = f.String(**STR_REQUIRED)
     email = f.Email(**REQUIRED)

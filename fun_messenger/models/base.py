@@ -6,34 +6,54 @@ import sqlalchemy
 
 from fleaker import MISSING
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import declared_attr, declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy_utils.types import ArrowType
-from werkzeug.utils import cached_property
 
 from fun_messenger.extensions import db, inflect
 
 
-_Base = declarative_base()
+class Base(object):
 
+    @declared_attr
+    def id(cls):
+        return db.Column(
+            UUID(as_uuid=True),
+            primary_key=True,
+            server_default=sqlalchemy.text("gen_random_uuid()"),
+        )
 
-class BaseModel(_Base):
-    id = db.Column(
-        UUID(as_uuid=True),
-        primary_key=True,
-        server_default=sqlalchemy.text("gen_random_uuid()"),
-    )
-    created_at = db.Column(ArrowType, default=arrow.utcnow)
-    updated_at = db.Column(ArrowType, nullable=True)
-    archived_at = db.Column(ArrowType, nullable=True)
+    @declared_attr
+    def created_at(cls):
+        return db.Column(ArrowType, default=arrow.utcnow)
 
-    @cached_property
-    def __tablename__(self):
-        return stringcase.snakecase(inflect.plural(self.__class__.__name__))
+    @declared_attr
+    def updated_at(cls):
+        return db.Column(ArrowType, nullable=True)
+
+    @declared_attr
+    def archived_at(cls):
+        return db.Column(ArrowType, nullable=True)
+
+    @declared_attr
+    def __tablename__(cls):
+        return stringcase.snakecase(inflect.plural(cls.__name__))
+
+    @declared_attr
+    def __table_args__(cls):
+        return {
+            'extend_existing': True,
+        }
 
     @hybrid_property
     def is_archived(self):
         return self.archived_at == None
+
+    def archive(self):
+        self.archived_at = arrow.utcnow()
+
+    def unarchive(self):
+        self.archived_at = None
 
     @classmethod
     def get_all(cls, archived=MISSING):
@@ -45,6 +65,9 @@ class BaseModel(_Base):
             query = query.filter(cls.is_archived == False)
 
         return query
+
+
+BaseModel = declarative_base(cls=Base)
 
 
 @db.event.listens_for(BaseModel, 'before_update')

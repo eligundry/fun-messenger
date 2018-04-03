@@ -17,6 +17,9 @@ Flask-Migrate = "*"
 marshmallow-sqlalchemy = "*"
 "psycopg2-binary" = "*"
 flask-classful = "*"
+flask-uuid = "*"
+eventlet = "*"
+redis = "*"
 
 [dev-packages]
 flask-shell-ipython = "*"

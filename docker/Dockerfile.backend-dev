@@ -1,0 +1,4 @@
+FROM eligundry/fun-messenger-backend
+
+# Install development and testing packages
+RUN pipenv install --system --dev

@@ -7,6 +7,7 @@ import { Messenger } from './components/Messenger';
 import { ThreadProps } from './components/Thread';
 import rootReducer from './reducers';
 
+const store = createStore(rootReducer);
 const testThread: ThreadProps = {
     messages: [
         {
@@ -19,8 +20,6 @@ const testThread: ThreadProps = {
         }
     ]
 };
-
-const store = createStore(rootReducer);
 
 const App = () => (
     <Provider store={store}>

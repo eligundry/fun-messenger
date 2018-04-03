@@ -8,10 +8,8 @@ from fleaker.app import (
     MultiStageConfigurableApp
 )
 
-import fun_messenger.extensions as ext
-import fun_messenger.models.user as user
-
 from fun_messenger.blueprints import register_api_routes
+from fun_messenger.extensions import init_extensions
 
 
 class FunMessengerApp(FleakerJSONApp, LoggingAwareApp,
@@ -25,12 +23,7 @@ def create_app(settings=DEFAULT_DICT):
     app.configure(settings, os.environ, 'fun_messenger.settings')
 
     # Init the extensions
-    ext.bcrypt.init_app(app)
-    ext.db.init_app(app)
-    ext.jwt.init_app(app)
-    ext.marshmallow.init_app(app)
-    ext.migrate.init_app(app, ext.db)
-    ext.socketio.init_app(app)
+    init_extensions(app)
 
     # Attach the API routes
     register_api_routes(app)

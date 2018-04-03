@@ -34,11 +34,22 @@ def upgrade():
     )
     conn.execute(
         """
+        CREATE TABLE pgp_keys (
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            user_ID UUID NOT NULL REFERENCES users,
+            public_key TEXT NOT NULL,
+            private_key TEXT NOT NULL
+        )
+        """
+    )
+    conn.execute(
+        """
         CREATE TABLE friends (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             initiator_id UUID NOT NULL REFERENCES users,
             recipient_id UUID NOT NULL REFERENCES users,
             accepted_at TIMESTAMP NULL,
+            text TEXT NULL,
             created_at TIMESTAMP NOT NULL,
             updated_at TIMESTAMP NULL,
             archived_at TIMESTAMP NULL
@@ -90,4 +101,5 @@ def downgrade():
     conn.execute("DROP TABLE thread_users")
     conn.execute("DROP TABLE threads")
     conn.execute("DROP TABLE friends")
+    conn.execute("DROP TABLE pgp_keys")
     conn.execute("DROP TABLE users")

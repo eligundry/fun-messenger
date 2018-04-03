@@ -7,7 +7,7 @@ from fun_messenger.extensions import db
 from .base import BaseModel
 
 
-class Thread(BaseModel, db.Model):
+class Thread(db.Model, BaseModel):
     title = db.Column(db.Unicode(255), nullable=True)
     created_by_id = db.Column(UUID, db.ForeignKey('users.id'), nullable=False)
 
@@ -31,7 +31,7 @@ class Thread(BaseModel, db.Model):
         )
 
 
-class ThreadUser(BaseModel, db.Model):
+class ThreadUser(db.Model, BaseModel):
     user_id = db.Column(UUID, db.ForeignKey('users.id'), nullable=False)
     thread_id = db.Column(UUID, db.ForeignKey('threads.id'), nullable=False)
 
@@ -49,9 +49,9 @@ class ThreadUser(BaseModel, db.Model):
     )
 
 
-class Message(BaseModel, db.Model):
+class Message(db.Model, BaseModel):
     author_id = db.Column(UUID, db.ForeignKey('users.id'), nullable=False)
-    # thread_id = db.Column(UUID, db.ForeignKey('threads.id'), nullable=False)
+    thread_id = db.Column(UUID, db.ForeignKey('threads.id'), nullable=False)
     text = db.Column(db.Text, nullable=False)
 
     user = db.relationship(
@@ -60,7 +60,7 @@ class Message(BaseModel, db.Model):
         lazy=True,
         uselist=False
     )
-    threads = db.relationship(
+    thread = db.relationship(
         'Thread',
         backref=db.backref('messages', uselist=True),
         lazy=True,

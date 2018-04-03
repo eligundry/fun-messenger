@@ -1,0 +1,4 @@
+FROM eligundry/fun-messenger-frontend
+
+# Install development and testing packages
+RUN npm install --only=dev

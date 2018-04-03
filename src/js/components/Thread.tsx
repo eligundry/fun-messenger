@@ -10,7 +10,7 @@ export const Thread: React.SFC<ThreadProps> = (props) => {
     const messages = props.messages.map((message: MessageProps) =>{
         return (
             <Message
-                key={message.id.toString()}
+                key={message.id}
                 {...message}
             />
         );

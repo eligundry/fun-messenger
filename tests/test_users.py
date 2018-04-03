@@ -1,6 +1,9 @@
 """Integration tests for the users routes."""
 
-def test_sign_up_user(client, url_for, faker):
+from flask import url_for
+
+
+def test_sign_up_user(client, faker):
     resp = client.post(
         url_for('api.UsersView:sign_up'),
         json=faker.user_payload(),
