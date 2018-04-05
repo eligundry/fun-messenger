@@ -21,12 +21,12 @@ services:
       - .:/opt/fun_messenger
 
   nginx:
-    image: nginx:stable-alpine
+    image: nginx:stable
     container_name: fm-proxy
     ports:
       - "80:80"
     volumes:
-      - ./docker/nginx/proxy.conf:/etc/nginx/sites-enabled/default
+      - ./docker/nginx/proxy.conf:/etc/nginx/conf.d/default.conf
 
   db:
     image: postgres
@@ -39,12 +39,6 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql
       - ./docker/postgres:/docker-entrypoint-initdb.d
-
-  adminer:
-    image: adminer
-    container_name: fm-adminer
-    ports:
-      - "8080:8080"
 
   redis:
     image: redis:4-alpine

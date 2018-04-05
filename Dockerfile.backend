@@ -1,8 +1,9 @@
 FROM python:3-slim
 
-# Fix up the image's network stack so eventlet works
 RUN apt-get update \
-    && apt-get -y -o Dpkg::Options::="--force-confmiss" install --reinstall netbase
+    # Fix up the image's network stack so eventlet works
+    && apt-get -y -o Dpkg::Options::="--force-confmiss" install --reinstall netbase \
+    && apt-get install -y curl
 
 # Install Python dependencies
 RUN pip install -U pip pipenv
