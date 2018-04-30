@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.frontend-dev
+    ports:
+      - "8888:8888"
     volumes:
       - .:/opt/fun-messenger-frontend
       - ./dist:/usr/share/nginx/html
@@ -17,6 +19,8 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.backend-dev
+    ports:
+      - "8000:8000"
     volumes:
       - .:/opt/fun_messenger
 

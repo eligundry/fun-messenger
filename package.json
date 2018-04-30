@@ -20,9 +20,9 @@
         "typescript": "^2.7.2"
     },
     "scripts": {
-        "serve": "parcel src/",
-        "build": "parcel build src/",
-        "docker-build": "parcel build src/ -d /usr/share/nginx/html",
+        "serve": "parcel src/ -t node",
+        "build": "parcel build src/ -t node",
+        "docker-build": "parcel build src/ -d /usr/share/nginx/html -t node",
         "test": "echo \"Error: no test specified\" && exit 1",
         "lint": "tslint -c tslint.json src/**/*.tsx"
     },
