@@ -13,6 +13,9 @@ backend_container:
 
 containers: frontend_container backend_container
 
-publish: build
+publish: containers
 	docker push $(FRONTEND_TAG)
 	docker push $(BACKEND_TAG)
+
+up: containers
+	docker-compose up

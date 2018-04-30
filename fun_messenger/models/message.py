@@ -3,8 +3,10 @@
 from sqlalchemy.dialects.postgresql import UUID
 
 from fun_messenger.extensions import db
+from fun_messenger.exceptions import FriendMismatch
 
 from .base import BaseModel
+from .user import User
 
 
 class Thread(db.Model, BaseModel):
@@ -21,7 +23,7 @@ class Thread(db.Model, BaseModel):
     @classmethod
     def get_threads(cls, user_id):
         return (
-            cls.query()
+            cls.query
             .join(ThreadUser, db.and_(
                 ThreadUser.user_id == user_id,
                 ThreadUser.thread_id == cls.id,
@@ -29,6 +31,39 @@ class Thread(db.Model, BaseModel):
             ))
             .filter(cls.is_archived == False)
         )
+
+    @classmethod
+    def get_thread(cls, user_id, thread_id):
+        return cls.get_threads(user_id).filter(cls.id == thread_id).one()
+
+    @classmethod
+    def create_thread(cls, creator, data: dict):
+        from .user import Friend
+
+        if not Friend.check(creator.id, data['members']):
+            raise FriendMismatch(
+                "You must be friends with all members to start a thread."
+            )
+
+        thread = cls(title=data['title'], created_by=creator)
+        db.session.add(thread)
+        db.session.add(ThreadUser(user=creator, thread=thread))
+
+        for user_id in data['members']:
+            db.session.add(ThreadUser(
+                user_id=user_id,
+                thread=thread,
+            ))
+
+        db.session.add(Message(
+            author=creator,
+            thread=thread,
+            text=data['message'],
+        ))
+
+        db.session.commit()
+
+        return thread
 
 
 class ThreadUser(db.Model, BaseModel):
@@ -41,7 +76,7 @@ class ThreadUser(db.Model, BaseModel):
         lazy=True,
         uselist=False
     )
-    threads = db.relationship(
+    thread = db.relationship(
         'Thread',
         backref=db.backref('users_in', uselist=True),
         lazy=True,
@@ -54,7 +89,7 @@ class Message(db.Model, BaseModel):
     thread_id = db.Column(UUID, db.ForeignKey('threads.id'), nullable=False)
     text = db.Column(db.Text, nullable=False)
 
-    user = db.relationship(
+    author = db.relationship(
         'User',
         backref=db.backref('messages_sent', uselist=True),
         lazy=True,

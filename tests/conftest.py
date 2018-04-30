@@ -9,7 +9,10 @@ from fun_messenger.fixtures import faker as _faker
 
 @pytest.fixture
 def app():
-    return create_app()
+    settings = {
+        'BCRYPT_LOG_ROUNDS': 5,
+    }
+    return create_app(settings=settings)
 
 
 @pytest.fixture(scope="session")

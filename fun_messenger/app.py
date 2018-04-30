@@ -4,7 +4,7 @@ import os
 
 from fleaker import DEFAULT_DICT
 from fleaker.app import (
-    BaseApplication, FleakerJSONApp, LoggingAwareApp, FlaskClientAwareApp,
+    FleakerJSONApp, LoggingAwareApp, FlaskClientAwareApp,
     MultiStageConfigurableApp
 )
 

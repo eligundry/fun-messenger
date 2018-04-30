@@ -71,7 +71,7 @@ class Base(object):
         for key, value in data.items():
             if not hasattr(self, key):
                 classname = self.__class__.__name__
-                raise InvalidUpdateKey(f"{classname} has not attribute named {key}.")
+                raise InvalidUpdateKey(f"{classname} does not have an attribute called {key}.")
 
             setattr(self, key, value)
 

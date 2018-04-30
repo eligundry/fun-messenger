@@ -4,7 +4,9 @@ EXPOSE 8888
 
 # Nginx will serve the static site
 RUN apt-get update \
-    && apt-get install -y nginx \
+    && apt-get install -y \
+        git \
+        nginx \
     && rm -r /var/lib/apt/lists/*
 ADD docker/nginx/fontend.conf /etc/nginx/sites-enabled/default
 

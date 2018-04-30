@@ -41,12 +41,17 @@ class User(db.Model, BaseModel):
         return (
             cls.query
             .join(Friend, (db.and_(
-                db.or_(
-                    Friend.initiator_id == user_id,
-                    Friend.recipient_id == user_id,
-                ),
                 Friend.accepted == True,
-                Friend.is_archived == False,
+                db.or_(
+                    db.and_(
+                        Friend.initiator_id == user_id,
+                        Friend.recipient_id == cls.id,
+                    ),
+                    db.and_(
+                        Friend.recipient_id == user_id,
+                        Friend.initiator_id == cls.id,
+                    ),
+                )
             )))
             .filter(User.is_archived == False)
         )
@@ -128,22 +133,53 @@ class Friend(db.Model, BaseModel):
     @accepted.expression
     def accepted(cls):
         return db.and_(
-            cls.archived_at != None,
             cls.accepted_at != None,
+            cls.archived_at == None,
         )
+
+    @classmethod
+    def check(cls, user_id, friend_ids):
+        friend_count = (
+            db.session.query(User.id)
+            .distinct(User.id)
+            .join(Friend, db.and_(
+                cls.accepted == True,
+                db.or_(
+                    db.and_(
+                        cls.initiator_id == user_id,
+                        cls.recipient_id == User.id,
+                    ),
+                    db.and_(
+                        cls.recipient_id == user_id,
+                        cls.initiator_id == User.id,
+                    )
+                ),
+            ))
+            .filter(db.and_(
+                User.id != user_id,
+                User.id.in_(friend_ids),
+                User.is_archived == False,
+            ))
+            .group_by(User.id)
+            .count()
+        )
+
+        return friend_count >= len(friend_ids)
 
 
 @jwt.authentication_handler
 def authenticate(email, password):
-    return (
+    user = (
         User.query()
         .filter(db.and_(
             User.email == email,
-            User.password == bcrypt.generate_password_hash(password),
-            User.archived_at == None,
+            User.is_archived == False,
         ))
         .first()
     )
+
+    if bcrypt.check_password_hash(user.password, password):
+        return user
 
 
 @jwt.jwt_payload_handler
@@ -159,8 +195,14 @@ def make_payload(identity: User) -> dict:
 
 @jwt.identity_handler
 def identity(payload: dict) -> User:
-    return User.query.filter(User.id == payload['identity']).one()
-
+    return (
+        User.query
+        .filter(
+            User.id == payload['identity'],
+            User.is_archived == False,
+        )
+        .one()
+    )
 
 
 @jwt.jwt_error_handler

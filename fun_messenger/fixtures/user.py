@@ -43,6 +43,8 @@ class UserProvider(BaseProvider):
                 accepted_at=arrow.utcnow(),
             ))
 
+        db.session.commit()
+
         return friend
 
     def friends(self, user: models.User, count: int):
