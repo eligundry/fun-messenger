@@ -51,4 +51,13 @@ def register_api_routes(app):
             'message': exc.args[0],
         }), 400
 
+    @blueprint.errorhandler(Exception)
+    def generic_built_in_error(exc):
+        msg = exc.args[0] if app.config['DEBUG'] else 'Internal Server Error'
+
+        return jsonify({
+            'class': exc.__class__.__name__,
+            'message': msg,
+        }), 500
+
     app.register_blueprint(blueprint)

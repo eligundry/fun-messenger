@@ -10,6 +10,7 @@ from werkzeug.utils import cached_property
 
 class BaseView(FlaskView):
 
+    route_base = '/'
     schema_class = Schema
     trailing_slash = False
     excluded_methods = [

@@ -6,7 +6,6 @@ from fun_messenger.extensions import db
 from fun_messenger.exceptions import FriendMismatch
 
 from .base import BaseModel
-from .user import User
 
 
 class Thread(db.Model, BaseModel):
@@ -105,9 +104,38 @@ class Message(db.Model, BaseModel):
     @classmethod
     def get_thread_messages(cls, thread_id):
         return (
-            cls.query()
+            cls.query
             .filter(db.and_(
                 cls.thread_id == thread_id,
                 cls.is_archived == False,
             ))
         )
+
+    @classmethod
+    def create_message(cls, thread_id, creator, payload):
+        thread = Thread.get_thread(creator.id, thread_id)
+        message = cls(
+            author=creator,
+            thread=thread,
+            text=payload['text'],
+        )
+
+        db.session.add(message)
+        db.session.commit()
+
+        return message
+
+    @classmethod
+    def archive_message(cls, message_id, initiator=None):
+        query = cls.query.filter(cls.id == message_id)
+
+        if initiator:
+            query = query.filter(cls.author_id == initiator.id)
+
+        message = query.one()
+        message.archive()
+
+        db.session.add(message)
+        db.session.commit()
+
+        return message

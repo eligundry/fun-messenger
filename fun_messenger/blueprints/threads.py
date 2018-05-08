@@ -12,7 +12,7 @@ from .base import BaseView
 
 class ThreadsView(BaseView):
 
-    route_base = '/threads'
+    route_prefix = '/threads'
     decorators = [jwt_required()]
     schema_class = ThreadSchema
 

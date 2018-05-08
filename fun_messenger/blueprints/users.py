@@ -13,7 +13,7 @@ from .base import BaseView
 
 class UsersView(BaseView):
 
-    route_base = '/users'
+    route_prefix = '/users'
     schema_class = UserSchema
 
     @jwt_required()

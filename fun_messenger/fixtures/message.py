@@ -23,3 +23,24 @@ class MessageProvider(BaseProvider):
         thread = models.Thread.create_thread(creator, thread_payload)
 
         return thread
+
+    def message_payload(self) -> dict:
+        return {
+            'text': self.generator.text(),
+        }
+
+    def message(self, creator: models.User, thread: models.Thread) -> models.Message:
+        message = models.Message.create_message(
+            str(thread.id),
+            creator,
+            self.message_payload(),
+        )
+
+        db.session.add(message)
+        db.session.commit()
+
+        return message
+
+    def messages(self, creator, thread, count=3):
+        for _ in range(count):
+            yield self.message(creator, thread)
