@@ -9,25 +9,26 @@ import rootReducer from './reducers';
 
 const store = createStore(rootReducer);
 const testThread: ThreadProps = {
-    messages: [
-        {
-            id: 1,
-            text: "Hello world!"
-        },
-        {
-            id: 2,
-            text: "Hello back!"
-        }
-    ]
+  messages: [
+    {
+      id: 1,
+      text: 'Hello world!',
+    },
+    {
+      id: 2,
+      text: 'Hello back!',
+    },
+  ],
 };
 
+// socket.io settings
+const socketUri = `${window.location.origin}/api/ws`;
+const socketOptions = {};
+
 const App = () => (
-    <Provider store={store}>
-        <Messenger thread={testThread} />
-    </Provider>
+  <Provider store={store}>
+    <Messenger thread={testThread} />
+  </Provider>
 );
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('app')
-);
+ReactDOM.render(<App />, document.getElementById('app'));

@@ -3,22 +3,22 @@ import * as React from 'react';
 import { Message, MessageProps } from './Message';
 
 export interface ThreadProps extends React.Props<Thread> {
-    messages?: MessageProps[],
+  messages?: MessageProps[],
 }
 
 export const Thread: React.SFC<ThreadProps> = (props) => {
-    const messages = props.messages.map((message: MessageProps) =>{
-        return (
-            <Message
-                key={message.id}
-                {...message}
-            />
-        );
-    });
-
+  const messages = props.messages.map((message: MessageProps) =>{
     return (
-        <div className="thread">
-            {messages}
-        </div>
+      <Message
+        key={message.id}
+        {...message}
+      />
     );
+  });
+
+  return (
+    <div className="thread">
+      {messages}
+    </div>
+  );
 }

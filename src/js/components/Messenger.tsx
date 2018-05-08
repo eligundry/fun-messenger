@@ -4,16 +4,16 @@ import { Composer } from './Composer';
 import { Thread, ThreadProps } from './Thread';
 
 export interface MessengerProps extends React.Props<Messenger> {
-    thread?: ThreadProps,
+  thread?: ThreadProps,
 }
 
 export class Messenger extends React.Component<MessengerProps, {}> {
-    render() {
-        return (
-            <main className="messenger">
-                <Thread messages={this.props.thread.messages} />
-                <Composer />
-            </main>
-        );
-    }
+  render() {
+    return (
+      <main className="messenger">
+        <Thread messages={this.props.thread.messages} />
+        <Composer />
+      </main>
+    );
+  }
 }
