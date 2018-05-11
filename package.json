@@ -4,12 +4,15 @@
     "description": "My attempt at making an app with the Parcel Bundler, React, and Typescript",
     "main": "src/index.html",
     "dependencies": {
-        "muicss": "^0.9.39",
+        "@types/node-fetch": "^1.6.9",
+        "node-fetch": "^2.1.2",
         "openpgp": "^3.0.9",
         "react": "^16.3.2",
         "react-dom": "^16.3.2",
         "react-redux": "^5.0.7",
-        "redux": "^3.7.2"
+        "redux": "^3.7.2",
+        "redux-thunk": "^2.2.0",
+        "socket.io-client": "^2.1.0"
     },
     "devDependencies": {
         "node-sass": "^4.9.0",

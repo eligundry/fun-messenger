@@ -1,13 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 
 import { Messenger } from './components/Messenger';
 import { ThreadProps } from './components/Thread';
-import rootReducer from './reducers';
+import configureStore from './store/configureStore';
 
-const store = createStore(rootReducer);
+const store = configureStore();
 const testThread: ThreadProps = {
   messages: [
     {

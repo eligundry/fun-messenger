@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux'
 
-import messages from './messages';
+import { messageSent, messageSendingHasErrored, messages } from './messages';
 
 export default combineReducers({
   messages,
+  messageSent,
+  messageSendingHasErrored,
 });

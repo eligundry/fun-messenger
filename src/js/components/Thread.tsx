@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Message, MessageProps } from './Message';
 
 export interface ThreadProps extends React.Props<Thread> {
+  id: string,
   messages?: MessageProps[],
 }
 
@@ -17,7 +18,7 @@ export const Thread: React.SFC<ThreadProps> = (props) => {
   });
 
   return (
-    <div className="thread">
+    <div className="thread" key={props.id}>
       {messages}
     </div>
   );

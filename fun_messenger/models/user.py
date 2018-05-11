@@ -185,11 +185,17 @@ def authenticate(email, password):
 @jwt.jwt_payload_handler
 def make_payload(identity: User) -> dict:
     iat = datetime.utcnow()
+
     return {
         'exp': iat + current_app.config.get('JWT_EXPIRATION_DELTA'),
         'iat': iat,
         'identity': str(identity.id),
         'nbf': iat + current_app.config.get('JWT_NOT_BEFORE_DELTA'),
+        'profile': {
+            'first_name': identity.first_name,
+            'last_name': identity.last_name,
+            'email': identity.email,
+        }
     }
 
 
