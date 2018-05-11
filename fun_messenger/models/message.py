@@ -109,6 +109,7 @@ class Message(db.Model, BaseModel):
                 cls.thread_id == thread_id,
                 cls.is_archived == False,
             ))
+            .order_by(cls.created_at)
         )
 
     @classmethod

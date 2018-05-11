@@ -7,26 +7,44 @@ import { ThreadProps } from './components/Thread';
 import configureStore from './store/configureStore';
 
 const store = configureStore();
-const testThread: ThreadProps = {
-  messages: [
+const exampleState: object = {
+  threads: [
     {
       id: 1,
-      text: 'Hello world!',
+      isSending: false,
+      hasErrored: false,
+      messages: [
+        {
+          id: 1,
+          text: 'Hello world!',
+        },
+        {
+          id: 2,
+          text: 'Hello back!',
+        },
+      ],
     },
     {
       id: 2,
-      text: 'Hello back!',
+      isSending: false,
+      hasErrored: false,
+      messages: [
+        {
+          id: 1,
+          text: 'Hello world!',
+        },
+        {
+          id: 2,
+          text: 'Hello back!',
+        },
+      ],
     },
   ],
 };
 
-// socket.io settings
-const socketUri = `${window.location.origin}/api/ws`;
-const socketOptions = {};
-
 const App = () => (
   <Provider store={store}>
-    <Messenger thread={testThread} />
+    <Messenger {...exampleState} />
   </Provider>
 );
 

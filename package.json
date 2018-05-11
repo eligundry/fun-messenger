@@ -28,7 +28,7 @@
         "build": "parcel build src/index.html -t browser -d dist/ --out-file dist/index.html",
         "docker-build": "parcel build src/index.html -d /usr/share/nginx/html -t browser --out-file index.html",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "lint": "tslint -c tslint.json src/**/*.tsx"
+        "lint": "tslint -c tslint.json 'src/**/*.ts*'"
     },
     "author": "Eli Gundry",
     "license": "ISC"

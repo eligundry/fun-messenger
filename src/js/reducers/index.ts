@@ -1,9 +1,9 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
 
-import { messageSent, messageSendingHasErrored, messages } from './messages';
+import { messages } from './messages';
+import { threads } from './threads';
 
 export default combineReducers({
   messages,
-  messageSent,
-  messageSendingHasErrored,
+  threads,
 });

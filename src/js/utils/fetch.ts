@@ -1,6 +1,4 @@
-import { fetch as _fetch } from 'node-fetch';
-import { RequestInit, Response } from 'node-fetch';
-
+import { fetch as _fetch, RequestInit, Response } from 'node-fetch';
 
 export const fetch = (url: string, options: RequestInit = {}): Promise<Response> => {
   const jwt: string|null = window.sessionStorage('jwt');
@@ -21,5 +19,7 @@ export const fetch = (url: string, options: RequestInit = {}): Promise<Response>
     options.body = JSON.stringify(options.body);
   }
 
-  return _fetch(url, options);
+  return _fetch(url.indexOf('http') !== -1 ? url : window.location.origin + url, options);
 };
+
+export default fetch;

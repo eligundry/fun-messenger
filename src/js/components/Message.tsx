@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 export interface MessageProps extends React.Props<Message> {
-  id: string,
-  text: string,
+  id: string;
+  text: string;
 }
 
-export const Message: React.SFC<MessageProps> = (props) => {
+export const Message: React.SFC<MessageProps> = (props: MessageProps) => {
   return (
     <div className="message">
       {props.text}
@@ -13,4 +13,4 @@ export const Message: React.SFC<MessageProps> = (props) => {
   );
 };
 
-export default Message
+export default Message;
