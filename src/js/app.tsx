@@ -6,7 +6,7 @@ import { Messenger } from './components/Messenger';
 import { ThreadProps } from './components/Thread';
 import configureStore from './store/configureStore';
 
-const store = configureStore();
+const store = configureStore({});
 const exampleState: object = {
   threads: [
     {

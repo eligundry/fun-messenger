@@ -9,14 +9,18 @@ export interface MessengerProps extends React.Props<Messenger> {
 
 export class Messenger extends React.Component<MessengerProps, {}> {
   render() {
-    const threads = this.props.threads.map((thread: ThreadProps) => {
-      return (
-        <Thread
-          key={thread.id}
-          {...thread}
-        />
-      );
-    });
+    let threads = null;
+
+    if (this.props.threads) {
+      threads = this.props.threads.map((thread: ThreadProps) => {
+        return (
+          <Thread
+            key={thread.id}
+            {...thread}
+          />
+        );
+      });
+    }
 
     return (
       <main className="messenger">

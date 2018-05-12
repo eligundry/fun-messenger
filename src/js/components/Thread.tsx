@@ -2,13 +2,6 @@ import * as React from 'react';
 
 import { Message, MessageProps } from './Message';
 
-export interface ThreadProps extends React.Props<Thread> {
-  id: string;
-  isSending: boolean;
-  hasErrors: boolean;
-  messages: string[];
-}
-
 export const Thread: React.SFC<ThreadProps> = (props: ThreadProps) => {
   const messages = props.messages.map((message: MessageProps) => {
     return (
@@ -25,3 +18,10 @@ export const Thread: React.SFC<ThreadProps> = (props: ThreadProps) => {
     </div>
   );
 };
+
+export interface ThreadProps extends React.Props<Thread> {
+  id: string;
+  isSending: boolean;
+  hasErrors: boolean;
+  messages: string[];
+}

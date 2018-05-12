@@ -1,28 +1,21 @@
-import { MessageProps } from '../components/Message';
-import fetch from '../utils/fetch';
-
-export const MESSAGE_CONSTS = {
-  MESSAGE_SENDING: 'MESSAGE_SENDING',
-  MESSAGE_SENT: 'MESSAGE_SENT',
-  MESSAGE_SENDING_HAS_FAILED: 'MESSAGE_SENDING_HAS_FAILED',
-};
+import { MESSAGE, MessageResponse } from './index';
 
 export const messageSending = (isLoading: boolean) => ({
   isLoading,
-  type: MESSAGE_CONSTS.MESSAGE_SENDING,
+  type: MESSAGE.MESSAGE_SENDING,
 });
 
 export const messageSent = (message: MessageProps) => ({
   message,
-  type: MESSAGE_CONSTS.MESSAGE_SENT,
+  type: MESSAGE.MESSAGE_SENT,
 });
 
 export const messageSendingHasFailed = (errorMessage: string) => ({
   errorMessage,
-  type: MESSAGE_CONSTS.MESSAGE_SENDING_HAS_FAILED,
+  type: MESSAGE.MESSAGE_SENDING_HAS_FAILED,
 });
 
-export const sendMessageData = (threadID, messageData) => {
+export const sendMessageData = (threadID: string, messageData) => {
   return (dispatch) => {
     dispatch(messageSending(true));
 
