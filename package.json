@@ -4,7 +4,6 @@
     "description": "My attempt at making an app with the Parcel Bundler, React, and Typescript",
     "main": "src/index.html",
     "dependencies": {
-        "@types/node-fetch": "^1.6.9",
         "jwt-decode": "^2.2.0",
         "node-fetch": "^2.1.2",
         "openpgp": "^3.0.9",
@@ -17,29 +16,46 @@
     },
     "devDependencies": {
         "@types/jest": "^22.2.3",
+        "@types/node-fetch": "^1.6.9",
         "@types/react": "^16.3.14",
         "@types/react-dom": "^16.0.5",
         "@types/react-redux": "^6.0.0",
         "enzyme": "^3.3.0",
         "enzyme-adapter-react-16": "^1.1.1",
         "eslint-plugin-react": "^7.7.0",
+        "fetch-mock": "^6.3.0",
         "jest": "^22.4.3",
-        "nock": "^9.2.5",
         "node-sass": "^4.9.0",
         "parcel-bundler": "^1.8.1",
         "parcel-plugin-eslint": "^1.0.4",
         "parcel-plugin-typescript": "^0.7.1",
+        "redux-mock-store": "^1.5.1",
         "tslint": "^5.10.0",
         "tslint-config-airbnb": "^5.8.0",
         "tslint-react": "^3.5.1",
-        "typescript": "^2.8.3"
+        "typescript": "^2.8.3",
+        "typescript-babel-jest": "^1.0.5"
     },
     "scripts": {
         "serve": "parcel src/index.html -t browser -d dist/ -o dist/index.html --out-file index.html",
         "build": "parcel build src/index.html -t browser -d dist/ --out-file dist/index.html",
         "docker-build": "parcel build src/index.html -d /usr/share/nginx/html -t browser --out-file index.html",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "jest",
+        "test:watch": "npm test -- --watch",
         "lint": "tslint -c tslint.json 'src/**/*.ts*'"
+    },
+    "jest": {
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js"
+        ],
+        "transform": {
+            "^.+\\.(ts|tsx|js)$": "typescript-babel-jest"
+        },
+        "testMatch": [
+            "**/__tests__/*.+(ts|tsx|js)"
+        ]
     },
     "author": "Eli Gundry",
     "license": "ISC"
