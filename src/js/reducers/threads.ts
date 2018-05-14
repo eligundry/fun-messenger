@@ -4,7 +4,7 @@ import { THREAD, ThreadResponse } from '../actions/threads';
 export interface ThreadItem {
   id: string;
   title: string;
-  messages: string[];
+  messages: MessageResponse[];
 }
 
 export interface ThreadState {
