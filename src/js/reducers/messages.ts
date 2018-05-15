@@ -33,6 +33,7 @@ export const messages = (state: MessageState = {}, action: any) => {
 
       return { ...state, ...threadsMessages };
 
+    case THREAD:THREAD_CREATED:
     case THREAD.THREAD_FETCHED:
       // Extract all the messages from the thread and key the bodies to the
       // message ID.

@@ -6,6 +6,7 @@
     "dependencies": {
         "jwt-decode": "^2.2.0",
         "node-fetch": "^2.1.2",
+        "normalize-scss": "^7.0.1",
         "openpgp": "^3.0.9",
         "react": "^16.3.2",
         "react-dom": "^16.3.2",
@@ -20,6 +21,7 @@
         "@types/react": "^16.3.14",
         "@types/react-dom": "^16.0.5",
         "@types/react-redux": "^6.0.0",
+        "babel-core": "^6.26.3",
         "babel-jest": "^22.4.3",
         "babel-preset-react": "^6.24.1",
         "enzyme": "^3.3.0",
@@ -28,10 +30,12 @@
         "fetch-mock": "^6.3.0",
         "jest": "^22.4.3",
         "node-sass": "^4.9.0",
+        "npm": "^6.0.1",
         "parcel-bundler": "^1.8.1",
         "parcel-plugin-eslint": "^1.0.4",
         "parcel-plugin-typescript": "^0.7.1",
         "redux-mock-store": "^1.5.1",
+        "regenerator-runtime": "^0.11.1",
         "ts-jest": "^22.4.6",
         "tslint": "^5.10.0",
         "tslint-config-airbnb": "^5.8.0",
@@ -52,15 +56,19 @@
             "tsx",
             "js"
         ],
+        "moduleDirectories": [
+            "<rootDir>/node_modules"
+        ],
         "transform": {
-            "^.+\\.(ts|tsx|js)$": "ts-jest"
+            "^.+\\.(ts|tsx)?$": "<rootDir>/node_modules/ts-jest/preprocessor.js",
+            "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest"
         },
         "testMatch": [
             "**/__tests__/*.+(ts|tsx|js)"
         ],
         "globals": {
             "ts-jest": {
-                "skipBabel": true
+                "useBabelrc": true
             }
         }
     },

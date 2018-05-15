@@ -4,20 +4,23 @@ import { THREAD, ThreadResponse } from '../actions/threads';
 export interface ThreadItem {
   id: string;
   title: string;
-  messages: MessageResponse[];
+  messages: string[];
 }
 
 export interface ThreadState {
   [key: string]: ThreadItem[];
 }
 
-export const threads = (state = {}, action) => {
+export const initialState: ThreadState = {};
+
+export const threads = (state: ThreadState = initialState, action) => {
   switch (action.type) {
     case THREAD.THREAD_CREATING:
       return state;
 
+    case THREAD.THREAD_FETCHED:
     case THREAD.THREAD_CREATED:
-      const newThread: ThreadItem = { ...action.thread };
+      const newThread: ThreadItem = Object.assign({}, action.thread);
       newThread.messages = newThread.messages.map((message: MessageResponse) => message.id);
 
       return { ...state, [newThread.id]: newThread };
@@ -25,6 +28,7 @@ export const threads = (state = {}, action) => {
     case THREAD.THREAD_CREATING_HAS_FAILED:
       return state;
 
+    case THREAD.THREAD_FETCHING:
     case THREAD.THREADS_FETCHING:
       return state;
 
@@ -46,6 +50,7 @@ export const threads = (state = {}, action) => {
 
       return { ...state, ...newThreads };
 
+    case THREAD.THREAD_FETCHING_HAS_FAILED:
     case THREAD.THREADS_FETCHING_HAS_FAILED:
       return state;
 
@@ -53,3 +58,5 @@ export const threads = (state = {}, action) => {
       return state;
   }
 };
+
+export default threads;

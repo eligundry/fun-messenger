@@ -1,8 +1,18 @@
 {
     "compilerOptions": {
+        "allowJs": true,
         "jsx": "react",
-        "target": "es5",
+        "target": "ES5",
         "module": "commonjs",
-        "strict": true
-    }
+        "strict": true,
+        "lib": [
+            "dom",
+            "es5",
+            "es2015",
+            "es2016"
+        ]
+    },
+    "exclude": [
+        "node_modules"
+    ]
 }

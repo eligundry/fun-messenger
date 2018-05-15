@@ -3,44 +3,10 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { Messenger } from './components/Messenger';
-import { ThreadProps } from './components/Thread';
-import configureStore from './store/configureStore';
+import { configureStore, State } from './store/configureStore';
 
-const store = configureStore({});
-const exampleState: object = {
-  threads: [
-    {
-      id: 1,
-      isSending: false,
-      hasErrored: false,
-      messages: [
-        {
-          id: 1,
-          text: 'Hello world!',
-        },
-        {
-          id: 2,
-          text: 'Hello back!',
-        },
-      ],
-    },
-    {
-      id: 2,
-      isSending: false,
-      hasErrored: false,
-      messages: [
-        {
-          id: 1,
-          text: 'Hello world!',
-        },
-        {
-          id: 2,
-          text: 'Hello back!',
-        },
-      ],
-    },
-  ],
-};
+const exampleState: State = {};
+const store = configureStore(exampleState);
 
 const App = () => (
   <Provider store={store}>

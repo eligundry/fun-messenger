@@ -12,7 +12,7 @@ export interface State {
   threads: ThreadState;
 }
 
-const configureStore = (initialState: State) => {
+export const configureStore = (initialState: State) => {
   return createStore(
     rootReducer,
     initialState,
