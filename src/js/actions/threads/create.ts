@@ -1,18 +1,24 @@
+import { ErrorAction, LoadingAction } from '../index';
 import { MessageResponse } from '../messages';
 import { THREAD, ThreadResponse } from './index';
 import fetch from '../../utils/fetch';
 
-export const threadCreating = (isLoading: boolean) => ({
+export interface ThreadCreatedAction {
+  thread: ThreadResponse;
+  type: THREAD.THREAD_CREATED;
+}
+
+export const threadCreating = (isLoading: boolean): LoadingAction => ({
   isLoading,
   type: THREAD.THREAD_CREATING,
 });
 
-export const threadCreated = (thread: ThreadResponse) => ({
+export const threadCreated = (thread: ThreadResponse): ThreadCreatedAction => ({
   thread,
   type: THREAD.THREAD_CREATED,
 });
 
-export const threadCreatingHasFailed = (errorMessage: string) => ({
+export const threadCreatingHasFailed = (errorMessage: string): ErrorAction => ({
   errorMessage,
   type: THREAD.THREAD_CREATING_HAS_FAILED,
 });

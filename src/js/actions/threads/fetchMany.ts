@@ -1,17 +1,23 @@
+import { ErrorAction, LoadingAction } from '../index';
 import { THREAD, ThreadResponse } from './index';
 import fetch from '../../utils/fetch';
 
-export const threadsFetching = (isLoading: boolean) => ({
+export interface ThreadsFetchedAction {
+  threads: ThreadResponse[];
+  type: THREAD.THREADS_FETCHED;
+}
+
+export const threadsFetching = (isLoading: boolean): LoadingAction => ({
   isLoading,
   type: THREAD.THREADS_FETCHING,
 });
 
-export const threadsFetched = (threads: ThreadProps[]) => ({
+export const threadsFetched = (threads: ThreadResponse[]): ThreadsFetchedAction => ({
   threads,
   type: THREAD.THREADS_FETCHED,
 });
 
-export const threadsFetchingHasFailed = (errorMessage: string) => ({
+export const threadsFetchingHasFailed = (errorMessage: string): ErrorAction => ({
   errorMessage,
   type: THREAD.THREADS_FETCHING_HAS_FAILED,
 });

@@ -1,17 +1,23 @@
-import fetch from '../../utils/fetch';
+import { ErrorAction, LoadingAction } from '../index';
 import { MESSAGE, MessageResponse, MessagePayload } from './index';
+import fetch from '../../utils/fetch';
 
-export const messageSending = (isLoading: boolean) => ({
+export interface MessageSentAction {
+  message: MessageResponse;
+  type: MESSAGE.MESSAGE_SENT;
+}
+
+export const messageSending = (isLoading: boolean): LoadingAction => ({
   isLoading,
   type: MESSAGE.MESSAGE_SENDING,
 });
 
-export const messageSent = (message: MessageResponse) => ({
+export const messageSent = (message: MessageResponse): MessageSentAction => ({
   message,
   type: MESSAGE.MESSAGE_SENT,
 });
 
-export const messageSendingHasFailed = (errorMessage: string) => ({
+export const messageSendingHasFailed = (errorMessage: string): ErrorAction => ({
   errorMessage,
   type: MESSAGE.MESSAGE_SENDING_HAS_FAILED,
 });

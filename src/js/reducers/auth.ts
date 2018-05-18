@@ -1,5 +1,6 @@
 import jwt_decode from 'jwt-decode';
 
+import { ActionTypes } from '../actions';
 import { AUTHENTICATION } from '../actions/auth';
 
 export interface AuthenticationState {
@@ -18,7 +19,7 @@ export const initialState: AuthenticationState = {
   jwt: null,
 };
 
-export const auth = (state: AuthenticationState = initialState, action): AuthenticationState => {
+export const auth = (state: AuthenticationState = initialState, action: ActionTypes): AuthenticationState => {
   switch (action.type) {
     case AUTHENTICATION.LOGGING_IN:
       return { ...state, isLoading: action.isLoading };

@@ -1,21 +1,31 @@
 import { AUTHENTICATION, AuthenticationResponse } from './index';
+import { ErrorAction, LoadingAction } from '../index';
 
-export const loggingIn = (isLoading: boolean) => ({
+export interface LoggedInAction {
+  authentication: AuthenticationResponse;
+  type: AUTHENTICATION.LOGGED_IN;
+}
+
+export interface LogOutAction {
+  type: AUTHENTICATION.LOG_OUT;
+}
+
+export const loggingIn = (isLoading: boolean): LoadingAction => ({
   isLoading,
   type: AUTHENTICATION.LOGGING_IN,
 });
 
-export const loggedIn = (authentication: AuthenticationResponse) => ({
+export const loggedIn = (authentication: AuthenticationResponse): LoggedInAction => ({
   authentication,
   type: AUTHENTICATION.LOGGED_IN,
 });
 
-export const loggingInHasFailed = (errorMessage: string) => ({
+export const loggingInHasFailed = (errorMessage: string): ErrorAction => ({
   errorMessage,
   type: AUTHENTICATION.LOGGING_IN_HAS_FAILED,
 });
 
-export const logOut = () => ({
+export const logOut = (): LogOutAction => ({
   type: AUTHENTICATION.LOG_OUT,
 });
 

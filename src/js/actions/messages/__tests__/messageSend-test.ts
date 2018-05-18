@@ -1,7 +1,7 @@
 const faker = require('faker');
 
-import { MESSAGE, MessageResponse, MessagePayload } from '../index';
-import * as actions from '../messageSend';
+import { MESSAGE, MessageResponse } from '../index';
+import * as actions from '../send';
 
 describe('send a message', () => {
   test('start sending a message', () => {

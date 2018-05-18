@@ -1,3 +1,4 @@
+import { ActionTypes } from '../actions';
 import { MESSAGE, MessageResponse } from '../actions/messages';
 import { THREAD, ThreadResponse } from '../actions/threads';
 
@@ -7,7 +8,7 @@ export interface MessageState {
 
 export const initialState: MessageState = {};
 
-export const messages = (state: MessageState = initialState, action: any) => {
+export const messages = (state: MessageState = initialState, action: ActionTypes): MessageState => {
   switch (action.type) {
     case MESSAGE.MESSAGE_SENDING:
       return state;

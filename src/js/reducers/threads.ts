@@ -1,3 +1,4 @@
+import { ActionTypes } from '../actions';
 import { MessageResponse } from '../actions/messages';
 import { THREAD, ThreadResponse } from '../actions/threads';
 
@@ -8,20 +9,25 @@ export interface ThreadItem {
 }
 
 export interface ThreadState {
-  [key: string]: ThreadItem[];
+  [key: string]: ThreadItem;
 }
 
 export const initialState: ThreadState = {};
 
-export const threads = (state: ThreadState = initialState, action) => {
+export const threads = (state: ThreadState = initialState, action: ActionTypes): ThreadState => {
   switch (action.type) {
     case THREAD.THREAD_CREATING:
       return state;
 
     case THREAD.THREAD_FETCHED:
     case THREAD.THREAD_CREATED:
-      const newThread: ThreadItem = Object.assign({}, action.thread);
-      newThread.messages = newThread.messages.map((message: MessageResponse) => message.id);
+      const newThread: ThreadItem = {
+        id: action.thread.id,
+        title: action.thread.title,
+        messages: action.thread.messages.map(
+          (message: MessageResponse): string => message.id
+        ),
+      };
 
       return { ...state, [newThread.id]: newThread };
 
@@ -34,14 +40,16 @@ export const threads = (state: ThreadState = initialState, action) => {
 
     case THREAD.THREADS_FETCHED:
       const newThreads: ThreadState = action.threads.reduce(
-        (threads: ThreadState, thread: ThreadResponse) => {
+        (threads: ThreadState, thread: ThreadResponse): ThreadState => {
           // Key the new object to the thread ID with the thread data within.
-          threads[thread.id] = Object.assign({}, thread);
-
-          // Convert the nested messages into an array of message IDs
-          threads[thread.id].messages = thread.messages.map(
-            (message: MessageResponse) => message.id,
-          );
+          threads[thread.id] = {
+            id: thread.id,
+            title: thread.title,
+            // Convert the nested messages into an array of message IDs
+            messages: thread.messages.map(
+              (message: MessageResponse): string => message.id,
+            ),
+          };
 
           return threads;
         },
