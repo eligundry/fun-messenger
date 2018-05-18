@@ -3,14 +3,13 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { Messenger } from './components/Messenger';
-import { configureStore, State } from './store/configureStore';
+import { configureStore } from './store/configureStore';
 
-const exampleState: State = {};
-const store = configureStore(exampleState);
+const store = configureStore();
 
 const App = () => (
   <Provider store={store}>
-    <Messenger {...exampleState} />
+    <Messenger />
   </Provider>
 );
 

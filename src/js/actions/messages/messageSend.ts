@@ -1,11 +1,12 @@
-import { MESSAGE, MessageResponse } from './index';
+import fetch from '../../utils/fetch';
+import { MESSAGE, MessageResponse, MessagePayload } from './index';
 
 export const messageSending = (isLoading: boolean) => ({
   isLoading,
   type: MESSAGE.MESSAGE_SENDING,
 });
 
-export const messageSent = (message: MessageProps) => ({
+export const messageSent = (message: MessageResponse) => ({
   message,
   type: MESSAGE.MESSAGE_SENT,
 });
@@ -15,13 +16,13 @@ export const messageSendingHasFailed = (errorMessage: string) => ({
   type: MESSAGE.MESSAGE_SENDING_HAS_FAILED,
 });
 
-export const sendMessageData = (threadID: string, messageData) => {
+export const sendMessageData = (threadID: string, messagePayload: MessagePayload) => {
   return (dispatch) => {
     dispatch(messageSending(true));
 
     return fetch(`/api/threads/${threadID}/messages`, {
       method: 'POST',
-      body: messageData,
+      body: messagePayload,
     })
       .then((response) => {
         if (!response.ok) {
@@ -34,6 +35,6 @@ export const sendMessageData = (threadID: string, messageData) => {
       })
       .then(response => response.json())
       .then(message => dispatch(messageSent(message)))
-      .catch(err => dispatch(messageSendingHasErrored(err.message)));
+      .catch(err => dispatch(messageSendingHasFailed(err.message)));
   };
 };

@@ -40,4 +40,6 @@ describe('create a thread', () => {
       type: THREAD.THREAD_CREATED,
     });
   });
+
+  // @TODO Test the actual fetch
 });

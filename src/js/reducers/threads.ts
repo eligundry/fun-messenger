@@ -39,7 +39,7 @@ export const threads = (state: ThreadState = initialState, action) => {
           threads[thread.id] = Object.assign({}, thread);
 
           // Convert the nested messages into an array of message IDs
-          threads[thread.id] = thread.messages.map(
+          threads[thread.id].messages = thread.messages.map(
             (message: MessageResponse) => message.id,
           );
 

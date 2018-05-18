@@ -4,6 +4,10 @@ export enum MESSAGE {
   MESSAGE_SENDING_HAS_FAILED = 'MESSAGE_SENDING_HAS_FAILED',
 }
 
+export interface MessagePayload {
+  text: string;
+}
+
 export interface MessageResponse {
   id: string;
   text: string;

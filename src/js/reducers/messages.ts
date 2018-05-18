@@ -5,7 +5,9 @@ export interface MessageState {
   [key: string]: MessageResponse;
 }
 
-export const messages = (state: MessageState = {}, action: any) => {
+export const initialState: MessageState = {};
+
+export const messages = (state: MessageState = initialState, action: any) => {
   switch (action.type) {
     case MESSAGE.MESSAGE_SENDING:
       return state;
@@ -21,19 +23,19 @@ export const messages = (state: MessageState = {}, action: any) => {
       // Extract all the messages from all the threads and key the bodies of the
       // messages to the message ID.
       const threadsMessages: MessageState = action.threads.reduce(
-          (messages: MessageState, thread: ThreadResponse) => {
-            thread.messages.forEach((message: MessageResponse) => {
-              messages[message.id] = message;
-            });
+        (messages: MessageState, thread: ThreadResponse) => {
+          thread.messages.forEach((message: MessageResponse) => {
+            messages[message.id] = message;
+          });
 
-            return messages;
-          },
+          return messages;
+        },
         {},
       );
 
       return { ...state, ...threadsMessages };
 
-    case THREAD:THREAD_CREATED:
+    case THREAD.THREAD_CREATED:
     case THREAD.THREAD_FETCHED:
       // Extract all the messages from the thread and key the bodies to the
       // message ID.
@@ -51,3 +53,5 @@ export const messages = (state: MessageState = {}, action: any) => {
       return state;
   }
 };
+
+export default messages;

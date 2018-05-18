@@ -1,5 +1,5 @@
 import { THREAD, ThreadResponse } from './index';
-import fetch from '../utils/fetch';
+import fetch from '../../utils/fetch';
 
 export const threadsFetching = (isLoading: boolean) => ({
   isLoading,

@@ -1,10 +1,10 @@
-import { jwt_decode } from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 
 import { AUTHENTICATION } from '../actions/auth';
 
 export interface AuthenticationState {
-  isLoading: boolean = false;
-  isLoggedIn: boolean = false;
+  isLoading: boolean;
+  isLoggedIn: boolean;
   error: string|null;
   claims: object;
   jwt: string|null;
@@ -28,7 +28,7 @@ export const auth = (state: AuthenticationState = initialState, action): Authent
       const claims = jwt_decode(jwt);
 
       // Save the JWT in the session storage so fetch and use it easily.
-      window.sessionStorage.setItem('jwt', jwt);
+      window.sessionStorage && window.sessionStorage.setItem('jwt', jwt);
 
       return { ...state, claims, jwt, isLoggedIn: true, error: null };
 
@@ -37,7 +37,7 @@ export const auth = (state: AuthenticationState = initialState, action): Authent
 
     case AUTHENTICATION.LOG_OUT:
       // Remove the JWT from the session.
-      window.sessionStorage.removeItem('jwt');
+      window.sessionStorage && window.sessionStorage.removeItem('jwt');
 
       // Reset the state completely.
       return initialState;
