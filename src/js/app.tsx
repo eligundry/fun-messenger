@@ -6,6 +6,7 @@ import { Messenger } from './components/Messenger';
 import { configureStore } from './store/configureStore';
 
 const store = configureStore();
+console.log(store.getState());
 
 const App = () => (
   <Provider store={store}>

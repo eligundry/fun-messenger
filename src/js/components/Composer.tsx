@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { sendMessageData } from '../actions';
+import { sendMessageData } from '../actions/messages/send';
 
 interface ComposerProps extends React.Props<Composer> {
   placeholder?: string;

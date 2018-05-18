@@ -8,7 +8,8 @@ import { AUTHENTICATION } from '../index';
 // const middlewares = [thunk];
 // const mockStore = configureStore(middlewares);
 const payload = {
-  access_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjU4MzY3NDMsImlhdCI6MTUyNTgzNjQ0MywiaWRlbnRpdHkiOiIxZWQzMWQ4ZS04ZGU2LTRhNDAtODhmMi0wZjgxZTc2OTBhMWUiLCJuYmYiOjE1MjU4MzY0NDMsInByb2ZpbGUiOnsiZmlyc3RfbmFtZSI6IkVsaSIsImxhc3RfbmFtZSI6Ikd1bmRyeSIsImVtYWlsIjoiZWxpZ3VuZHJ5K3Rlc3QxQGdtYWlsLmNvbSJ9fQ.nZyALDoxhN8i9Oy1RmDH1JsfmIg63P0Q0dK3zOi54oI",
+  // tslint:disable-next-line:max-line-length
+  access_token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MjU4MzY3NDMsImlhdCI6MTUyNTgzNjQ0MywiaWRlbnRpdHkiOiIxZWQzMWQ4ZS04ZGU2LTRhNDAtODhmMi0wZjgxZTc2OTBhMWUiLCJuYmYiOjE1MjU4MzY0NDMsInByb2ZpbGUiOnsiZmlyc3RfbmFtZSI6IkVsaSIsImxhc3RfbmFtZSI6Ikd1bmRyeSIsImVtYWlsIjoiZWxpZ3VuZHJ5K3Rlc3QxQGdtYWlsLmNvbSJ9fQ.nZyALDoxhN8i9Oy1RmDH1JsfmIg63P0Q0dK3zOi54oI',
 };
 
 describe('log the user in', () => {
@@ -39,8 +40,8 @@ describe('log the user in', () => {
   });
 
   test('logging in fails gracefully', () => {
-    expect(logIn.loggingInHasFailed("Unauthorized")).toMatchObject({
-      errorMessage: "Unauthorized",
+    expect(logIn.loggingInHasFailed('Unauthorized')).toMatchObject({
+      errorMessage: 'Unauthorized',
       type: AUTHENTICATION.LOGGING_IN_HAS_FAILED,
     });
   });
@@ -49,7 +50,7 @@ describe('log the user in', () => {
     expect(logIn.logOut()).toMatchObject({
       type: AUTHENTICATION.LOG_OUT,
     });
-  })
+  });
 
   // test('sending login request succeeds', () => {
   //   const email = 'bob@example.com';

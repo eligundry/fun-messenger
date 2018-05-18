@@ -5,10 +5,10 @@ import { THREAD, ThreadResponse } from '../../actions/threads';
 
 const createThreadResponse = (): ThreadResponse => {
   const messageCount = faker.random.number(10);
-  let messages = [];
+  const threadMessages = [];
 
   for (let i = 0; i < messageCount; i++) {
-    messages.push({
+    threadMessages.push({
       id: faker.random.uuid(),
       text: faker.lorem.lines(),
     });
@@ -17,14 +17,14 @@ const createThreadResponse = (): ThreadResponse => {
   return {
     id: faker.random.uuid(),
     title: faker.company.bs(),
-    messages: messages,
+    messages: threadMessages,
   };
 };
 
 const createThreadsResponse = (count: number = 2): ThreadResponse[] => {
-  let threads = [];
+  const threads = [];
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i += 1) {
     threads.push(createThreadResponse());
   }
 
@@ -34,14 +34,21 @@ const createThreadsResponse = (count: number = 2): ThreadResponse[] => {
 const transformResponseToState = (threadResponse: any): ThreadState => {
   if (threadResponse instanceof Array) {
     return threadResponse.reduce((threads: ThreadState, thread: ThreadResponse) => {
-      threads[thread.id] = Object.assign({}, thread);
-      threads[thread.id].messages = thread.messages.map((message: MessageResponse) => message.id)
+      threads[thread.id] = {
+        id: thread.id,
+        title: thread.title,
+        messages: thread.messages.map((message: MessageResponse) => message.id),
+      };
+
       return threads;
-    }, {})
+    }, {});
   }
 
-  const newThread = Object.assign({}, threadResponse);
-  newThread.messages = threadResponse.messages.map(message => message.id);
+  const newThread = {
+    id: threadResponse.id,
+    title: threadResponse.title,
+    messages: threadResponse.messages.map(message => message.id),
+  };
 
   return { [newThread.id]: newThread };
 };

@@ -9,7 +9,8 @@
         "variable-name": false,
         "function-name": false,
         "jsx-no-lambda": false,
-        "align": false
+        "align": false,
+        "no-increment-decrement": false
     },
     "rulesDirectory": []
 }

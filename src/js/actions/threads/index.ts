@@ -13,7 +13,7 @@ export enum THREAD {
 }
 
 export interface ThreadResponse {
-  id: string,
-  title: string,
-  messages: MessageResponse[],
+  id: string;
+  title: string;
+  messages: MessageResponse[];
 }

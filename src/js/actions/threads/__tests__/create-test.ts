@@ -3,11 +3,11 @@ import * as createActions from '../create';
 
 const threadResponse: ThreadResponse = {
   id: '1ed31d8e-8de6-4a40-88f2-0f81e7690a1e',
-  title: "This is a test thread!",
+  title: 'This is a test thread!',
   messages: [
     {
       id: '1ed31d8e-8de6-4a40-88f2-0f81e7690a1e',
-      text: "Hello world!",
+      text: 'Hello world!',
     },
   ],
 };
@@ -28,8 +28,8 @@ describe('create a thread', () => {
   });
 
   test('tread creation fails gracefully', () => {
-    expect(createActions.threadCreatingHasFailed("Error")).toMatchObject({
-      errorMessage: "Error",
+    expect(createActions.threadCreatingHasFailed('Error')).toMatchObject({
+      errorMessage: 'Error',
       type: THREAD.THREAD_CREATING_HAS_FAILED,
     });
   });

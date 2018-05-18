@@ -1,4 +1,4 @@
-import jwt_decode from 'jwt-decode';
+import { jwt_decode } from 'jwt-decode';
 
 import { ActionTypes } from '../actions';
 import { AUTHENTICATION } from '../actions/auth';
@@ -19,31 +19,32 @@ export const initialState: AuthenticationState = {
   jwt: null,
 };
 
-export const auth = (state: AuthenticationState = initialState, action: ActionTypes): AuthenticationState => {
-  switch (action.type) {
-    case AUTHENTICATION.LOGGING_IN:
-      return { ...state, isLoading: action.isLoading };
+export const auth =
+  (state: AuthenticationState = initialState, action: ActionTypes): AuthenticationState => {
+    switch (action.type) {
+      case AUTHENTICATION.LOGGING_IN:
+        return { ...state, isLoading: action.isLoading };
 
-    case AUTHENTICATION.LOGGED_IN:
-      const jwt = action.authentication.access_token;
-      const claims = jwt_decode(jwt);
+      case AUTHENTICATION.LOGGED_IN:
+        const jwt: string = action.authentication.access_token;
+        const claims: object = jwt_decode(jwt);
 
-      // Save the JWT in the session storage so fetch and use it easily.
-      window.sessionStorage && window.sessionStorage.setItem('jwt', jwt);
+        // Save the JWT in the session storage so fetch and use it easily.
+        window.sessionStorage && window.sessionStorage.setItem('jwt', jwt);
 
-      return { ...state, claims, jwt, isLoggedIn: true, error: null };
+        return { ...state, claims, jwt, isLoggedIn: true, error: null };
 
-    case AUTHENTICATION.LOGGING_IN_HAS_FAILED:
-      return { ...state, error: action.errorMessage };
+      case AUTHENTICATION.LOGGING_IN_HAS_FAILED:
+        return { ...state, error: action.errorMessage };
 
-    case AUTHENTICATION.LOG_OUT:
-      // Remove the JWT from the session.
-      window.sessionStorage && window.sessionStorage.removeItem('jwt');
+      case AUTHENTICATION.LOG_OUT:
+        // Remove the JWT from the session.
+        window.sessionStorage && window.sessionStorage.removeItem('jwt');
 
-      // Reset the state completely.
-      return initialState;
+        // Reset the state completely.
+        return initialState;
 
-    default:
-      return state;
-  }
-};
+      default:
+        return state;
+    }
+  };

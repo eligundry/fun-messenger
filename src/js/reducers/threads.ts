@@ -25,7 +25,7 @@ export const threads = (state: ThreadState = initialState, action: ActionTypes):
         id: action.thread.id,
         title: action.thread.title,
         messages: action.thread.messages.map(
-          (message: MessageResponse): string => message.id
+          (message: MessageResponse): string => message.id,
         ),
       };
 

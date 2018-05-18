@@ -24,4 +24,4 @@ describe('fetch a thread', () => {
   });
 
   // @TODO Test the actual fetching
-})
+});
