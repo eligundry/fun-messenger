@@ -16,5 +16,5 @@ const ThreadList = ({ threads }) => {
     <div className='thread-list'>
       {threadListItems}
     </div>
-  )
+  );
 };
