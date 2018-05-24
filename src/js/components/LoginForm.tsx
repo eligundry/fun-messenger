@@ -16,7 +16,6 @@ export interface LoginFormProps extends React.Props {
 
 export const LoginForm: React.SFC<LoginFormProps> = (props: LoginFormProps) => {
   const { email, password } = props;
-  debugger;
   const handleSubmit = (event) => {
     event.preventDefault();
     props.submit(email, password);

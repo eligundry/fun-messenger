@@ -23,7 +23,13 @@ up: containers
 clean-js:
 	rm -rf dist/*
 
-nuke: clean-js
+clean-python:
+	find . -regex '.*\(\.py[co]\)' -delete
+	find . -type d -name __pycache__ -delete
+
+clean: clean-js clean-python
+
+nuke: clean-js clean-python
 	rm -rf node_modules
 
 js: clean-js
