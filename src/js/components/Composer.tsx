@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { sendMessageData } from '../actions/messages/send';
 
-interface ComposerProps extends React.Props<Composer> {
+interface ComposerProps extends React.Props {
   placeholder?: string;
   value?: string;
   onChange(): void;

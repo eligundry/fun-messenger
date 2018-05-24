@@ -1,29 +1,25 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter } from 'react-router-redux';
-import { Provider } from 'react-redux';
-import { Route } from 'react-router';
 
+import { Index } from './pages/index';
 import { reactRouterStore } from './store/configureStore';
-import Login from './pages/Login';
 
 // React Router & Redux Store
 const history = createHistory();
 const store = reactRouterStore(history);
+const Router = Index(store, history);
 console.log(store.getState());
 
 const App = () => (
   <Provider store={store}>
-    <CssBaseline />
-    <ConnectedRouter history={history}>
-      <div>
-        <Route exact path='/' component={Login} />
-      </div>
-    </ConnectedRouter>
+    <React.Fragment>
+      <CssBaseline />
+      {Router}
+    </React.Fragment>
   </Provider>
 );
-console.log(App());
 
 ReactDOM.render(<App />, document.getElementById('app'));

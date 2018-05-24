@@ -7,7 +7,8 @@ RUN apt-get update \
     && apt-get install -y \
         git \
         nginx \
-    && rm -r /var/lib/apt/lists/*
+    && rm -r /var/lib/apt/lists/* \
+    && adduser www-data node
 ADD docker/nginx/fontend.conf /etc/nginx/sites-enabled/default
 
 # Install node packages
