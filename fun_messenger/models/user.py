@@ -170,7 +170,7 @@ class Friend(db.Model, BaseModel):
 @jwt.authentication_handler
 def authenticate(email, password):
     user = (
-        User.query()
+        User.query
         .filter(db.and_(
             User.email == email,
             User.is_archived == False,

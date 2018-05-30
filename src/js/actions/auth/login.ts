@@ -1,5 +1,6 @@
 import { AUTHENTICATION, AuthenticationResponse } from './index';
 import { ErrorAction, LoadingAction } from '../index';
+import fetch from '../../utils/fetch';
 
 export interface LoggedInAction {
   authentication: AuthenticationResponse;
@@ -39,7 +40,7 @@ export const sendLoginData = (email: string, password: string) => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw Error(response.statusText);
+          throw response;
         }
 
         dispatch(loggingIn(false));
@@ -48,6 +49,9 @@ export const sendLoginData = (email: string, password: string) => {
       })
       .then(response => response.json())
       .then(authentication => dispatch(loggedIn(authentication)))
-      .catch(err => dispatch(loggingInHasFailed(err.message)));
+      .catch(response => {
+        return response.json()
+          .then(err => dispatch(loggingInHasFailed(err.description)));
+      });
   };
 };

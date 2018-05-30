@@ -2,7 +2,7 @@ const configureStore = require('redux-mock-store');
 const thunk = require('redux-thunk');
 const fetchMock = require('fetch-mock');
 
-import * as logIn from '../logIn';
+import * as logIn from '../login';
 import { AUTHENTICATION } from '../index';
 
 // const middlewares = [thunk];

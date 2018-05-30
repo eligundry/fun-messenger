@@ -1,47 +1,71 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import Snackbar from '@material-ui/core/Snackbar';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
-import sendLoginData from '../actions/auth/logIn';
+import { AuthenticationState } from '../reducers/auth';
+import { State } from '../store';
+import { sendLoginData } from '../actions/auth/login';
 
 export interface LoginFormProps extends React.Props {
+  auth: AuthenticationState;
   email: string;
   password: string;
-  submit(): Promise;
+  submit(string, string): Promise;
+  change(object): void;
 }
 
 export const LoginForm: React.SFC<LoginFormProps> = (props: LoginFormProps) => {
-  const { email, password } = props;
+  const { email, password, submit } = props;
+  const { error } = props.auth;
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    props.submit(email, password);
+    submit(email, password);
   }
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <FormControl>
-        <InputLabel htmlFor="email">Email</InputLabel>
-        <Input id="email" value={email} type="email"></Input>
-      </FormControl>
-      <FormControl>
-        <InputLabel htmlFor="password">Password</InputLabel>
-        <Input id="password" value={password} type="password"></Input>
-      </FormControl>
-      <FormControl>
-        <Button variant="raised" color="primary" onClick={handleSubmit}>
-          Submit
-        </Button>
-      </FormControl>
+      <TextField
+        label="Email"
+        id="email"
+        value={email}
+        type="email"
+        required
+      />
+      <TextField
+        label="Password"
+        id="password"
+        value={password}
+        type="password"
+        required
+      />
+      <Button variant="raised" color="primary" onClick={handleSubmit}>
+        Submit
+      </Button>
+      <Snackbar
+        message={error}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        autoHideDuration={200}
+        open={!!error}
+      />
     </form>
   );
 };
 
-const mapStateToProps = () => {};
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state: State) => {
+  return {
+    auth: state.auth
+  }
+};
+
+const mapDispatchToProps = dispatch => {
   return {
     submit: (email: string, password: string) => {
       return dispatch(sendLoginData(email, password));

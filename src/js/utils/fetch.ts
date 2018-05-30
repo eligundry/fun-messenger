@@ -1,17 +1,19 @@
-import { fetch as _fetch, RequestInit, Response } from 'node-fetch';
+import * as node_fetch from 'node-fetch';
 
-export const fetch = (url: string, options: RequestInit = {}): Promise<Response> => {
+export const fetch = (url: string, options: node_fetch.RequestInit = {}): Promise<node_fetch.Response> => {
   const jwt: string|null = window.sessionStorage.getItem('jwt');
 
   if (!options.headers) {
-    options.headers = {};
+    options.headers = {
+      'Content-Type': 'application/json',
+    };
   }
 
-  if (!'Content-Type' in options.headers) {
+  if (!options.headers['Content-Type']) {
     options.headers['Content-Type'] = 'application/json';
   }
 
-  if (!options.headers.hasOwnProperty('authorization') && jwt) {
+  if (!options.headers['authorization'] && jwt) {
     options.headers.authorization = `Bearer ${jwt}`;
   }
 
@@ -19,7 +21,10 @@ export const fetch = (url: string, options: RequestInit = {}): Promise<Response>
     options.body = JSON.stringify(options.body);
   }
 
-  return _fetch(url, options);
+  return window.fetch(
+    url.includes('http') ? url : window.location.origin + url,
+    options
+  );
 };
 
 export default fetch;

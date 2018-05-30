@@ -18,9 +18,11 @@ class UserProvider(BaseProvider):
             'password': self.generator.password(),
         }
 
-    def user(self) -> models.User:
+    def user(self, payload=None) -> models.User:
+        payload = payload or self.user_payload()
+
         with db.session.begin_nested() as trans:
-            user = models.User(**self.user_payload())
+            user = models.User(**payload)
             trans.session.add(user)
 
         return user
