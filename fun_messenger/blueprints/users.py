@@ -5,7 +5,7 @@ from flask_classful import route
 from flask_jwt import jwt_required, current_identity
 
 from fun_messenger.extensions import db
-from fun_messenger.schemata import UserSchema
+from fun_messenger.schemata import SignUpSchema, UserSchema
 from fun_messenger import models
 
 from .base import BaseView
@@ -55,4 +55,4 @@ class UsersView(BaseView):
         db.session.add(user)
         db.session.commit()
 
-        return self.serialize(user), 201
+        return self.serialize(user, schema=SignUpSchema()), 201

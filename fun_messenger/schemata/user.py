@@ -10,3 +10,8 @@ class UserSchema(Schema):
     last_name = f.String(**STR_REQUIRED)
     email = f.Email(**REQUIRED)
     password = f.String(load_only=True, **REQUIRED)
+    gravatar_url = f.URL(dump_only=True)
+
+
+class SignUpSchema(UserSchema):
+    jwt = f.String(**STR_REQUIRED)

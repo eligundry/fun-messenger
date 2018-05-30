@@ -20,6 +20,7 @@ flask-classful = "*"
 flask-uuid = "*"
 eventlet = "*"
 redis = "*"
+pygravatar = "*"
 
 [dev-packages]
 flask-shell-ipython = "*"
@@ -29,6 +30,7 @@ pytest-flask = "*"
 faker = "*"
 pdbpp = "*"
 "flake8" = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.6"

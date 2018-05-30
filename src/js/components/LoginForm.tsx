@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { Response } from 'node-fetch';
+import { connect } from 'react-redux';
 
 import { AuthenticationState } from '../reducers/auth';
 import { State } from '../store';
@@ -12,38 +13,37 @@ import { sendLoginData } from '../actions/auth/login';
 
 export interface LoginFormProps extends React.Props {
   auth: AuthenticationState;
-  email: string;
-  password: string;
-  submit(string, string): Promise;
-  change(object): void;
+  submit(string, string): Promise<Response>;
 }
 
 export const LoginForm: React.SFC<LoginFormProps> = (props: LoginFormProps) => {
-  const { email, password, submit } = props;
+  const { submit } = props;
   const { error } = props.auth;
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    const email = event.target.email.value;
+    const password = event.target.password.value;
     submit(email, password);
-  }
+  };
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
       <TextField
         label="Email"
         id="email"
-        value={email}
         type="email"
+        name="email"
         required
       />
       <TextField
         label="Password"
         id="password"
-        value={password}
         type="password"
+        name="password"
         required
       />
-      <Button variant="raised" color="primary" onClick={handleSubmit}>
+      <Button variant="raised" color="primary" type="submit">
         Submit
       </Button>
       <Snackbar

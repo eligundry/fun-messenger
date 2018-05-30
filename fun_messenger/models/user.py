@@ -3,10 +3,12 @@
 from datetime import datetime
 
 from flask import current_app, jsonify
+from gravatar import Gravatar
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
 from sqlalchemy_utils.types import ArrowType
+from werkzeug import cached_property
 
 from fun_messenger.extensions import bcrypt, db, jwt
 
@@ -30,6 +32,13 @@ class User(db.Model, BaseModel):
             password = self.password
 
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def jwt(self):
+        return jwt.jwt_encode_callback(self).decode('utf-8')
+
+    @cached_property
+    def gravatar_url(self):
+        return Gravatar(self.email, secure=True, size=512, rating='x').thumb
 
     @validates('email')
     def validate_email(self, key, email):
@@ -178,7 +187,7 @@ def authenticate(email, password):
         .first()
     )
 
-    if bcrypt.check_password_hash(user.password, password):
+    if user and bcrypt.check_password_hash(user.password, password):
         return user
 
 
@@ -207,7 +216,7 @@ def identity(payload: dict) -> User:
             User.id == payload['identity'],
             User.is_archived == False,
         )
-        .one()
+        .first()
     )
 
 

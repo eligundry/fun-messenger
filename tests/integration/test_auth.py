@@ -27,4 +27,4 @@ def test_bad_login_fails_gracefully(client):
 
     assert resp.status_code < 500
     assert resp.status_code >= 400
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
+    assert resp.json

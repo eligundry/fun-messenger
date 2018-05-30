@@ -33,7 +33,7 @@ services:
       - ./docker/nginx/proxy.conf:/etc/nginx/conf.d/default.conf
 
   db:
-    image: postgres
+    image: postgres:10
     container_name: fm-db
     environment:
       - POSTGRES_PASSWORD=password
@@ -41,8 +41,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql
       - ./docker/postgres:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql
 
   redis:
     image: redis:4-alpine
