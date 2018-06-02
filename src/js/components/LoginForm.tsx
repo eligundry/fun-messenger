@@ -2,41 +2,38 @@ import * as React from 'react';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Snackbar from '@material-ui/core/Snackbar';
-import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
 import { Response } from 'node-fetch';
 import { connect } from 'react-redux';
+import { reduxForm, Field } from 'redux-form';
+import { TextField } from 'redux-form-material-ui';
 
 import { AuthenticationState } from '../reducers/auth';
 import { State } from '../store';
 import { sendLoginData } from '../actions/auth/login';
 
 export interface LoginFormProps extends React.Props {
-  auth: AuthenticationState;
-  submit(string, string): Promise<Response>;
+  handleSubmit(object): Promise<Response>;
 }
 
 export const LoginForm: React.SFC<LoginFormProps> = (props: LoginFormProps) => {
-  const { submit } = props;
-  const { error } = props.auth;
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const email = event.target.email.value;
-    const password = event.target.password.value;
-    submit(email, password);
-  };
+  const { handleSubmit } = props;
+  // const { error } = props.auth;
+  const error = null;
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <TextField
+      <Field
+        component={TextField}
         label="Email"
         id="email"
         type="email"
         name="email"
         required
       />
-      <TextField
+      <Field
+        component={TextField}
         label="Password"
         id="password"
         type="password"
@@ -46,31 +43,18 @@ export const LoginForm: React.SFC<LoginFormProps> = (props: LoginFormProps) => {
       <Button variant="raised" color="primary" type="submit">
         Submit
       </Button>
-      <Snackbar
-        message={error}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        autoHideDuration={200}
-        open={!!error}
-      />
     </form>
   );
 };
 
-const mapStateToProps = (state: State) => {
-  return {
-    auth: state.auth
-  }
-};
+// export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export const ReduxLoginForm = reduxForm({
+  form: 'login',
+})(LoginForm)
 
-const mapDispatchToProps = dispatch => {
-  return {
-    submit: (email: string, password: string) => {
-      return dispatch(sendLoginData(email, password));
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect(
+  state => ({}),
+  dispatch => ({
+    onSubmit: (values) => dispatch(sendLoginData(values))
+  })
+)(ReduxLoginForm)
