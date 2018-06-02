@@ -30,7 +30,7 @@ export const logOut = (): LogOutAction => ({
   type: AUTHENTICATION.LOG_OUT,
 });
 
-export const sendLoginData = (email: string, password: string) => {
+export const sendLoginData = ({ email, password }) => {
   return (dispatch) => {
     dispatch(loggingIn(true));
 

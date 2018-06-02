@@ -1,11 +1,9 @@
-FRONTEND_TAG=eligundry/fun-messenger-frontend:latest
-FRONTEND_DEV_TAG=eligundry/fun-messenger-frontend:dev
-BACKEND_TAG=eligundry/fun-messenger-backend:latest
-BACKEND_DEV_TAG=eligundry/fun-messenger-backend:dev
+FRONTEND_TAG=eligundry/fun-messenger-frontend
+BACKEND_TAG=eligundry/fun-messenger-backend
 
 frontend-container:
-	docker build -f Dockerfile -t $(FRONTEND_TAG) .
-	docker build -f docker/Dockerfile.frontend-dev -t $(FRONTEND_DEV_TAG) .
+	docker build -f Dockerfile -t $(FRONTEND_TAG):latest -t $(FRONTEND_TAG):$(shell cat .git/refs/heads/master) .
+	docker build -f docker/Dockerfile.frontend-dev -t $(FRONTEND_TAG):dev -t $(FRONTEND_TAG):$(shell cat .git/refs/heads/master) .
 
 backend-container:
 	docker build -f Dockerfile.backend -t $(BACKEND_TAG) .
