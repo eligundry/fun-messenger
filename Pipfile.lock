@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7587a837a3e5a921bac367fe014a8a5f6f8ea0b053f1c576fd9b4368f4ceb65c"
+            "sha256": "9ddb3f42660dd12736f58beb861b439e4baa9a49a5359bd66fb4e0829d5c05aa"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -302,10 +302,10 @@
         },
         "phonenumbers": {
             "hashes": [
-                "sha256:86ceb7eb7eb99244b39fb6453fc90bf9ff3ccfa9d34130ea250ab17070f15032",
-                "sha256:eec334a7908746b675a0ba296b3a11322ed970614b62f2a6e5f086de4f3e2a84"
+                "sha256:536a0616b3cf2e84dbaa1a7b837704a91a585dd78d1c4ebdb7698e8715a1a31a",
+                "sha256:cd03748c15619ada0d03ac4a9e30b1b58f14b81ac641ea1c023636c25bd4cb3b"
             ],
-            "version": "==8.9.6"
+            "version": "==8.9.7"
         },
         "psycopg2-binary": {
             "hashes": [
@@ -345,15 +345,6 @@
                 "sha256:99a8ca03e29851d96616ad0404b4aad7d9ee16f25c9f9708a11faf2810f7b226"
             ],
             "version": "==2.18"
-        },
-        "pygravatar": {
-            "hashes": [
-                "sha256:3f01054573cc2345ff7b9dd512240200be399c757781c0ce7709cc76d3571fda",
-                "sha256:5fe7923e9b5c88390fce0a67324a434c4bdc303afc681d0614ca5b2c97cd6985",
-                "sha256:d0f6652a065c896d02688fd9cb43d9104747c2dcfcdf45f212dd5b791da3387c"
-            ],
-            "index": "pypi",
-            "version": "==0.0.6"
         },
         "pyjwt": {
             "hashes": [

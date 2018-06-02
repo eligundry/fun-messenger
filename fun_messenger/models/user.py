@@ -1,9 +1,10 @@
 """User model."""
 
 from datetime import datetime
+from hashlib import md5
+from typing import List
 
 from flask import current_app, jsonify
-from gravatar import Gravatar
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import validates
@@ -20,9 +21,10 @@ class User(db.Model, BaseModel):
     last_name = db.Column(db.Unicode(255), nullable=False)
     email = db.Column(db.Unicode(255), nullable=False, unique=True)
     password = db.Column(db.Unicode(255), nullable=False)
+    _avatar_url = db.Column(db.Unicode(255), nullable=True)
 
-    def password_is_hashed(self):
-        return self.password.startswith('$2b$12$')
+    def password_is_hashed(self) -> bool:
+        return self.password.startswith('$2b$')
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
@@ -33,20 +35,25 @@ class User(db.Model, BaseModel):
 
         self.password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    def jwt(self):
+    def jwt(self) -> str:
         return jwt.jwt_encode_callback(self).decode('utf-8')
 
     @cached_property
-    def gravatar_url(self):
-        return Gravatar(self.email, secure=True, size=512, rating='x').thumb
+    def avatar_url(self) -> str:
+        if self._avatar_url is None:
+            hashed_email = md5(self.email.lower().encode('utf-8')).hexdigest()
+            return f"https://www.gravatar.com/avatar/{hashed_email}"
+
+        return self._avatar_url
 
     @validates('email')
-    def validate_email(self, key, email):
+    def validate_email(self, key: str, email: str) -> str:
+        email = email.strip()
         assert '@' in email
         return email
 
     @classmethod
-    def get_friends(cls, user_id):
+    def get_friends(cls, user_id: str):
         return (
             cls.query
             .join(Friend, (db.and_(
@@ -147,7 +154,16 @@ class Friend(db.Model, BaseModel):
         )
 
     @classmethod
-    def check(cls, user_id, friend_ids):
+    def check(cls, user_id: str, friend_ids: List[str]):
+        """Check if user is friends with all users in a list of user IDs.
+
+        Args:
+            user_id (str): The ID of the User to check if Friends with.
+            friend_ids (List[str]): The IDs of the Friends to check.
+
+        Returns:
+            bool: Is the user friends with all the provided users?
+        """
         friend_count = (
             db.session.query(User.id)
             .distinct(User.id)
@@ -173,11 +189,11 @@ class Friend(db.Model, BaseModel):
             .count()
         )
 
-        return friend_count >= len(friend_ids)
+        return friend_count == len(friend_ids)
 
 
 @jwt.authentication_handler
-def authenticate(email, password):
+def authenticate(email: str, password: str):
     user = (
         User.query
         .filter(db.and_(

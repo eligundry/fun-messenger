@@ -20,7 +20,7 @@ class Thread(db.Model, BaseModel):
     )
 
     @classmethod
-    def get_threads(cls, user_id):
+    def get_threads(cls, user_id: str):
         return (
             cls.query
             .join(ThreadUser, db.and_(
@@ -32,7 +32,7 @@ class Thread(db.Model, BaseModel):
         )
 
     @classmethod
-    def get_thread(cls, user_id, thread_id):
+    def get_thread(cls, user_id: str, thread_id: str):
         return cls.get_threads(user_id).filter(cls.id == thread_id).one()
 
     @classmethod
@@ -102,7 +102,7 @@ class Message(db.Model, BaseModel):
     )
 
     @classmethod
-    def get_thread_messages(cls, thread_id):
+    def get_thread_messages(cls, thread_id: str):
         return (
             cls.query
             .filter(db.and_(
@@ -113,7 +113,7 @@ class Message(db.Model, BaseModel):
         )
 
     @classmethod
-    def create_message(cls, thread_id, creator, payload):
+    def create_message(cls, thread_id: str, creator, payload: dict) -> Message:
         thread = Thread.get_thread(creator.id, thread_id)
         message = cls(
             author=creator,
@@ -127,7 +127,7 @@ class Message(db.Model, BaseModel):
         return message
 
     @classmethod
-    def archive_message(cls, message_id, initiator=None):
+    def archive_message(cls, message_id: str, initiator=None) -> Message:
         query = cls.query.filter(cls.id == message_id)
 
         if initiator:

@@ -20,7 +20,6 @@ flask-classful = "*"
 flask-uuid = "*"
 eventlet = "*"
 redis = "*"
-pygravatar = "*"
 
 [dev-packages]
 flask-shell-ipython = "*"
