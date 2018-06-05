@@ -113,7 +113,7 @@ class Message(db.Model, BaseModel):
         )
 
     @classmethod
-    def create_message(cls, thread_id: str, creator, payload: dict) -> Message:
+    def create_message(cls, thread_id: str, creator, payload: dict):
         thread = Thread.get_thread(creator.id, thread_id)
         message = cls(
             author=creator,
@@ -127,7 +127,7 @@ class Message(db.Model, BaseModel):
         return message
 
     @classmethod
-    def archive_message(cls, message_id: str, initiator=None) -> Message:
+    def archive_message(cls, message_id: str, initiator=None):
         query = cls.query.filter(cls.id == message_id)
 
         if initiator:

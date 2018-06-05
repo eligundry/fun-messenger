@@ -21,7 +21,7 @@ class User(db.Model, BaseModel):
     last_name = db.Column(db.Unicode(255), nullable=False)
     email = db.Column(db.Unicode(255), nullable=False, unique=True)
     password = db.Column(db.Unicode(255), nullable=False)
-    _avatar_url = db.Column(db.Unicode(255), nullable=True)
+    remote_avatar_url = db.Column(db.Unicode(255), nullable=True)
 
     def password_is_hashed(self) -> bool:
         return self.password.startswith('$2b$')
@@ -38,13 +38,13 @@ class User(db.Model, BaseModel):
     def jwt(self) -> str:
         return jwt.jwt_encode_callback(self).decode('utf-8')
 
-    @cached_property
+    @property
     def avatar_url(self) -> str:
-        if self._avatar_url is None:
+        if self.remote_avatar_url is None:
             hashed_email = md5(self.email.lower().encode('utf-8')).hexdigest()
             return f"https://www.gravatar.com/avatar/{hashed_email}"
 
-        return self._avatar_url
+        return self.remote_avatar_url
 
     @validates('email')
     def validate_email(self, key: str, email: str) -> str:
@@ -154,7 +154,7 @@ class Friend(db.Model, BaseModel):
         )
 
     @classmethod
-    def check(cls, user_id: str, friend_ids: List[str]):
+    def check(cls, user_id: str, friend_ids: List[str]) -> bool:
         """Check if user is friends with all users in a list of user IDs.
 
         Args:
@@ -212,20 +212,20 @@ def make_payload(identity: User) -> dict:
     iat = datetime.utcnow()
 
     return {
-        'exp': iat + current_app.config.get('JWT_EXPIRATION_DELTA'),
-        'iat': iat,
         'identity': str(identity.id),
-        'nbf': iat + current_app.config.get('JWT_NOT_BEFORE_DELTA'),
         'profile': {
             'first_name': identity.first_name,
             'last_name': identity.last_name,
             'email': identity.email,
-        }
+        },
+        'iat': iat,
+        'exp': iat + current_app.config.get('JWT_EXPIRATION_DELTA'),
+        'nbf': iat + current_app.config.get('JWT_NOT_BEFORE_DELTA'),
     }
 
 
 @jwt.identity_handler
-def identity(payload: dict) -> User:
+def identity(payload: dict):
     return (
         User.query
         .filter(
